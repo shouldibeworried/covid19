@@ -9,6 +9,8 @@
     "react-scripts": "0.9.5"
   },
   "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-plugin-react": "^7.20.0",
     "gh-pages": "^2.2.0"
   },
   "homepage": "http://shouldibeworried.github.io/covid19",
@@ -17,6 +19,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
+    "lint": "eslint",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   }
