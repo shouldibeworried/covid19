@@ -15,18 +15,24 @@ def us_data(source_file):
                         columns=[], aggfunc=np.sum).transpose()
     as_dct = pv.to_dict(orient='series')
 
-#    serializable_dict = {
-#        state: {"dts": [dt.isoformat() for dt in as_dct[state].index],
-#                "values": as_dct[state].tolist()}
-#        for state in as_dct
-#    }
     return as_dct, pv.index.tolist()
+
+
+def canada_data(source_file):
+    df = pd.read_csv(source_file)
+    df.columns = [datetime.strptime(c, "%m/%d/%y").date() if i > 3 else c
+                  for i, c in enumerate(df.columns)]
+    df = df[df["Country/Region"] == "Canada"]
+    dates = df.columns.values.tolist()[-30:]
+    df = df[["Province/State"] + dates].set_index("Province/State").transpose()
+    as_dct = df.to_dict(orient='series')
+    return as_dct, df.index.tolist()
 
 
 def aggregate_north_america(us_cases, us_deaths, canada_cases, canada_deaths,
                             dates):
-    # TODO assertion to make sure we have the same dates everywhere
-    # TODO combine us and canada
+    us_cases.update(canada_cases)
+    us_deaths.update(canada_deaths)
     aggregate = {
         "dates": [dt.isoformat() for dt in dates],
         "cases": {state: us_cases[state].astype(int).tolist()
@@ -40,9 +46,11 @@ def main(us_cases_file, us_deaths_file, world_cases_file, world_deaths_file,
          na_outfile, eu_outfile):
     us_cases, dts1 = us_data(us_cases_file)
     us_deaths, dts2 = us_data(us_deaths_file)
-    assert dts1 == dts2
-    north_america = aggregate_north_america(us_cases, us_deaths, None, None,
-                                            dts1)
+    canada_cases, dts3 = canada_data(world_cases_file)
+    canada_deaths, dts4 = canada_data(world_deaths_file)
+    assert dts1 == dts2 == dts3 == dts4
+    north_america = aggregate_north_america(us_cases, us_deaths, canada_cases,
+                                            canada_deaths, dts1)
     with open(na_outfile, "w") as f:
         json.dump(north_america, f)
 
