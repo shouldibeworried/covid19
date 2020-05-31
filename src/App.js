@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import eu from './data/eu';
 
 class App extends Component {
   render() {
@@ -13,6 +14,18 @@ class App extends Component {
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
+        <table>
+          <tbody>
+            {Object.keys(eu.cases).map(
+                (key) => <tr key={key}>
+                  <td>{key}</td>
+                  {eu.cases[key].map(
+                      (casenum) => <td key={casenum}>{casenum}</td>
+                  )}
+                </tr>
+            )}
+          </tbody>
+        </table>
       </div>
     );
   }
