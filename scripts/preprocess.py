@@ -6,6 +6,14 @@ import json
 from datetime import datetime
 
 
+EUROPE = ["Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus", "Czechia",
+          "Denmark", "Estonia", "Finland", "France", "Germany", "Greece",
+          "Hungary", "Iceland", "Ireland", "Italy", "Latvia", "Liechtenstein",
+          "Lithuania", "Luxembourg", "Malta", "Netherlands", "Norway", "Poland",
+          "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Sweden",
+          "Switzerland"]
+
+
 def us_data(source_file):
     df = pd.read_csv(source_file)
     df.columns = [datetime.strptime(c, "%m/%d/%y").date() if i > 11 else c
@@ -29,15 +37,24 @@ def canada_data(source_file):
     return as_dct, df.index.tolist()
 
 
-def aggregate_north_america(us_cases, us_deaths, canada_cases, canada_deaths,
-                            dates):
-    us_cases.update(canada_cases)
-    us_deaths.update(canada_deaths)
+def eu_data(source_file):
+    df = pd.read_csv(source_file)
+    df.columns = [datetime.strptime(c, "%m/%d/%y").date() if i > 3 else c
+                  for i, c in enumerate(df.columns)]
+
+    df = df[df["Country/Region"].isin(EUROPE)]
+    df = df[df["Province/State"].isnull()]
+    dates = df.columns.values.tolist()[-30:]
+    df = df[["Country/Region"] + dates].set_index("Country/Region").transpose()
+    as_dct = df.to_dict(orient='series')
+    return as_dct, df.index.tolist()
+
+
+def output_format(cases, deaths, dates):
     aggregate = {
         "dates": [dt.isoformat() for dt in dates],
-        "cases": {state: us_cases[state].astype(int).tolist()
-                  for state in us_cases},
-        "deaths": {state: us_deaths[state].tolist() for state in us_cases}
+        "cases": {state: cases[state].astype(int).tolist() for state in cases},
+        "deaths": {state: deaths[state].tolist() for state in cases}
     }
     return aggregate
 
@@ -49,10 +66,18 @@ def main(us_cases_file, us_deaths_file, world_cases_file, world_deaths_file,
     canada_cases, dts3 = canada_data(world_cases_file)
     canada_deaths, dts4 = canada_data(world_deaths_file)
     assert dts1 == dts2 == dts3 == dts4
-    north_america = aggregate_north_america(us_cases, us_deaths, canada_cases,
-                                            canada_deaths, dts1)
+    us_cases.update(canada_cases)
+    us_deaths.update(canada_deaths)
+    north_america = output_format(us_cases, us_deaths, dts1)
     with open(na_outfile, "w") as f:
         json.dump(north_america, f)
+
+    eu_cases, dts1 = eu_data(world_cases_file)
+    eu_deaths, dts2 = eu_data(world_deaths_file)
+    europe = output_format(eu_cases, eu_deaths, dts1)
+    with open(eu_outfile, "w") as f:
+        json.dump(europe, f)
+    
 
 
 if __name__ == "__main__":
