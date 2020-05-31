@@ -1,19 +1,20 @@
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/css/bootstrap-theme.css';
+
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+
+import Jumbotron from 'react-bootstrap/Jumbotron';
+import Container from 'react-bootstrap/Container';
+
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
+      <Container className="p-3">
+        <Jumbotron>
+          <h1 className="header">Yet another Covid-19 Dashboard</h1>
+        </Jumbotron>
+      </Container>
     );
   }
 }
