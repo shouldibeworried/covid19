@@ -1,12 +1,11 @@
 const week = 7;
-const month = 29;
+const month = 30;
 const genLen = 6;
 const infectionFatalityMin = 0.003;
 const infectionFatalityMax = 0.013;
 const infectionFatalityMed = 0.008;
 
-// TODO increase when we have more data
-const deathOffset = 14;
+const deathOffset = 16;
 
 
 const geoMean = (sequence) => (
