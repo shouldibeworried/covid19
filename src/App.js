@@ -6,6 +6,7 @@ import population from './data/population.json';
 import {
   rNoughtWeeklyAverage, unknownInfectionFactorMedian,
   confirmedRecentCasesPer100K, estimatedRecentCasesPer100K,
+  deathFactor,
 } from './methodology';
 
 function App() {
@@ -44,6 +45,9 @@ function App() {
                 </td>
                 <td>
                   {estimatedRecentCasesPer100K(na.cases[key], na.deaths[key], population[key])}
+                </td>
+                <td>
+                  {deathFactor(na.cases[key], na.deaths[key])}
                 </td>
               </tr>
             ),

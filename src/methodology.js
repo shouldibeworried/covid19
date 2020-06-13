@@ -1,4 +1,5 @@
 const week = 7;
+const month = 29;
 const genLen = 6;
 const infectionFatalityMin = 0.003;
 const infectionFatalityMax = 0.013;
@@ -54,10 +55,47 @@ const recentCases = (cases) => {
   return current - previous;
 };
 
+
 export const confirmedRecentCasesPer100K = (cases, population) => (
   (100000 * recentCases(cases)) / population
 );
 
+
 export const estimatedRecentCasesPer100K = (cases, deaths, population) => (
   confirmedRecentCasesPer100K(cases, population) * unknownInfectionFactorMedian(cases, deaths)
 );
+
+
+const recentDeaths = (deaths) => {
+  const current = deaths[deaths.length - 1];
+  const previous = deaths[deaths.length - 1 - month];
+  return current - previous;
+};
+
+
+const deathProjection = (cases, deaths) => {
+  /* First, compute number of cases that will contribute to next months
+   * deaths. These are new cases starting from `deathOffset` days ago +
+   * projected cases for following (30 - deathOffset) days */
+  const current = cases[cases.length - 1];
+  const previous = cases[cases.length - 1 - deathOffset];
+  const existing = current - previous;
+
+  const r0 = rNoughtWeeklyAverage(cases);
+  let projected = 0;
+  let recent = recentCases(cases);
+  for (let i = 0; i < Math.floor((month - deathOffset) / week); i += 1) {
+    recent *= r0;
+    projected += recent;
+  }
+
+  const stubLength = (month - deathOffset) % week;
+  const stubCases = (r0 * recent * stubLength) / week;
+  projected += stubCases;
+
+  const cf = caseFatality(cases, deaths);
+  return (existing + projected) * cf;
+};
+
+
+export const deathFactor = (cases, deaths) => deathProjection(cases, deaths) / recentDeaths(deaths);
