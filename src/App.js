@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import na from './data/na.json';
+import eu from './data/eu.json';
 import population from './data/population.json';
 import {
   rNoughtWeeklyAverage, unknownInfectionFactorMedian,
@@ -29,25 +29,35 @@ function App() {
         </a>
       </header>
       <table>
+        <thead>
+          <tr>
+            <th>Country/State/Province</th>
+            <th>r0</th>
+            <th>unknown Infections</th>
+            <th>confirmed cases per 100k</th>
+            <th>estimated cases per 100k</th>
+            <th>deaths next month / current month</th>
+          </tr>
+        </thead>
         <tbody>
-          {Object.keys(na.cases).map(
+          {Object.keys(eu.cases).map(
             (key) => (
               <tr key={key}>
                 <td>{key}</td>
                 <td>
-                  {rNoughtWeeklyAverage(na.cases[key])}
+                  {rNoughtWeeklyAverage(eu.cases[key]).toFixed(2)}
                 </td>
                 <td>
-                  {unknownInfectionFactorMedian(na.cases[key], na.deaths[key])}
+                  {unknownInfectionFactorMedian(eu.cases[key], eu.deaths[key]).toFixed(2)}
                 </td>
                 <td>
-                  {confirmedRecentCasesPer100K(na.cases[key], population[key])}
+                  {confirmedRecentCasesPer100K(eu.cases[key], population[key]).toFixed(2)}
                 </td>
                 <td>
-                  {estimatedRecentCasesPer100K(na.cases[key], na.deaths[key], population[key])}
+                  {estimatedRecentCasesPer100K(eu.cases[key], eu.deaths[key], population[key]).toFixed(2)}
                 </td>
                 <td>
-                  {deathFactor(na.cases[key], na.deaths[key])}
+                  {deathFactor(eu.cases[key], eu.deaths[key]).toFixed(2)}
                 </td>
               </tr>
             ),
