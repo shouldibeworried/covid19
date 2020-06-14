@@ -72,7 +72,7 @@ CurrentSituation.propTypes = {
 
 function Outlook(props) {
   const {
-    country, cases, deaths, population,
+    country, cases, deaths,
   } = props;
   const r0 = rNoughtWeeklyAverage(cases);
   const d = recentDeaths(deaths);
@@ -87,7 +87,9 @@ function Outlook(props) {
               {language.RNOUGHT.replace(/{country}/g, country)}
             </p>
             <Alert variant={r0AlertLevel(r0)}>
-              r<sub>0</sub> =
+              r
+              <sub>0</sub>
+              &nbsp;=&nbsp;
               {r0.toFixed(1)}
             </Alert>
             <p>
@@ -110,7 +112,6 @@ Outlook.propTypes = {
   country: PropTypes.string.isRequired,
   cases: PropTypes.arrayOf(PropTypes.number).isRequired,
   deaths: PropTypes.arrayOf(PropTypes.number).isRequired,
-  population: PropTypes.arrayOf(PropTypes.number).isRequired,
 };
 
 
@@ -182,7 +183,6 @@ function CovidApp(props) {
             country={country}
             cases={cases[country]}
             deaths={deaths[country]}
-            population={population[country]}
           />
         </Row>
         <Row>
