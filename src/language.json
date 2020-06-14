@@ -1,5 +1,5 @@
 {
   "RNOUGHT": "On average, over the past 7 days, Covid-19's basic reproduction number in {country} has been approximately:",
   "RNOUGHTEXPL": "A basic reproduction number greater than 1 means the number of cases is growing exponentially, while a number below 1 means the number of cases is declining.",
-  "DEATHPROJECTION": "Over the past 30 days, {recentDeaths} people in {country} died of Covid-19. If {country} remains on its current trajectory, expect to see {projectionPhrase} number of Covid-19 related deaths over the next 30 days."
+  "DEATHPROJECTION": "Over the past 30 days, {recentDeaths} people in {country} have died of Covid-19. If {country} remains on its current trajectory, expect to see {projectionPhrase} deaths from Covid-19 over the next 30 days."
 }
