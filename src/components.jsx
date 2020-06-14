@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Alert from 'react-bootstrap/Alert';
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
@@ -8,12 +9,15 @@ import Navbar from 'react-bootstrap/Navbar';
 import Row from 'react-bootstrap/Row';
 import Table from 'react-bootstrap/Table';
 
-
 import {
   rNoughtWeeklyAverage, unknownInfectionFactorMedian,
   confirmedRecentCasesPer100K, estimatedRecentCasesPer100K,
-  deathFactor,
+  deathFactor, recentDeaths,
 } from './methodology';
+
+import language from './language.json';
+import { r0AlertLevel, projectionPhrase } from './thresholds';
+
 
 function Header(props) {
   const { country } = props;
@@ -33,19 +37,24 @@ Header.propTypes = {
 };
 
 
-function CurrentSituation() {
+function CurrentSituation(props) {
+  const {
+    country, cases, deaths, population,
+  } = props;
+  const r0 = rNoughtWeeklyAverage(cases);
   return (
     <Col md>
       <Card className="mt-4">
         <Card.Body>
           <Card.Title>Current Situation</Card.Title>
           <Card.Text>
-            Lorem ipsum dolor sit amet.
-            Lorem ipsum dolor sit amet.
-            Lorem ipsum dolor sit amet.
-            Lorem ipsum dolor sit amet.
-            Lorem ipsum dolor sit amet.
-            Lorem ipsum dolor sit amet.
+            <p>
+              {language.RNOUGHT.replace('{country}', country)}
+            </p>
+            <Alert variant={r0AlertLevel(r0)}>
+              r<sub>0</sub> =&nbsp;
+              {r0.toFixed(1)}
+            </Alert>
           </Card.Text>
         </Card.Body>
       </Card>
@@ -53,26 +62,56 @@ function CurrentSituation() {
   );
 }
 
+CurrentSituation.propTypes = {
+  country: PropTypes.string.isRequired,
+  cases: PropTypes.arrayOf(PropTypes.number).isRequired,
+  deaths: PropTypes.arrayOf(PropTypes.number).isRequired,
+  population: PropTypes.arrayOf(PropTypes.number).isRequired,
+};
 
-function Outlook() {
+
+function Outlook(props) {
+  const {
+    country, cases, deaths, population,
+  } = props;
+  const r0 = rNoughtWeeklyAverage(cases);
+  const d = recentDeaths(deaths);
+  const df = deathFactor(cases, deaths);
   return (
     <Col md>
       <Card className="mt-4">
         <Card.Body>
           <Card.Title>Outlook</Card.Title>
           <Card.Text>
-            Lorem ipsum dolor sit amet.
-            Lorem ipsum dolor sit amet.
-            Lorem ipsum dolor sit amet.
-            Lorem ipsum dolor sit amet.
-            Lorem ipsum dolor sit amet.
-            Lorem ipsum dolor sit amet.
+            <p>
+              {language.RNOUGHT.replace(/{country}/g, country)}
+            </p>
+            <Alert variant={r0AlertLevel(r0)}>
+              r<sub>0</sub> =
+              {r0.toFixed(1)}
+            </Alert>
+            <p>
+              {language.RNOUGHTEXPL}
+            </p>
+            <p>
+              {language.DEATHPROJECTION
+                .replace(/{country}/g, country)
+                .replace(/{recentDeaths}/g, d)
+                .replace(/{projectionPhrase}/g, projectionPhrase(df))}
+            </p>
           </Card.Text>
         </Card.Body>
       </Card>
     </Col>
   );
 }
+
+Outlook.propTypes = {
+  country: PropTypes.string.isRequired,
+  cases: PropTypes.arrayOf(PropTypes.number).isRequired,
+  deaths: PropTypes.arrayOf(PropTypes.number).isRequired,
+  population: PropTypes.arrayOf(PropTypes.number).isRequired,
+};
 
 
 function SummaryTable(props) {
@@ -133,8 +172,18 @@ function CovidApp(props) {
       <Header country={country} />
       <Container>
         <Row>
-          <CurrentSituation cases={cases} deaths={deaths} population={population} />
-          <Outlook cases={cases} deaths={deaths} population={population} />
+          <CurrentSituation
+            country={country}
+            cases={cases[country]}
+            deaths={deaths[country]}
+            population={population[country]}
+          />
+          <Outlook
+            country={country}
+            cases={cases[country]}
+            deaths={deaths[country]}
+            population={population[country]}
+          />
         </Row>
         <Row>
           <SummaryTable cases={cases} deaths={deaths} population={population} />
