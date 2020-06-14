@@ -65,7 +65,7 @@ export const estimatedRecentCasesPer100K = (cases, deaths, population) => (
 );
 
 
-const recentDeaths = (deaths) => {
+export const recentDeaths = (deaths) => {
   const current = deaths[deaths.length - 1];
   const previous = deaths[deaths.length - 1 - month];
   return current - previous;
