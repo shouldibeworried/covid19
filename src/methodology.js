@@ -47,6 +47,14 @@ export const unknownInfectionFactorMedian = (cases, deaths) => (
   caseFatality(cases, deaths) / infectionFatalityMed
 );
 
+export const unknownInfectionFactorRange = (cases, deaths) => {
+  const cf = caseFatality(cases, deaths);
+  return {
+    low: cf / infectionFatalityMax,
+    high: cf / infectionFatalityMin,
+  };
+};
+
 
 const recentCases = (cases) => {
   const current = cases[cases.length - 1];
