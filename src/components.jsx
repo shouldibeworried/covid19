@@ -12,15 +12,20 @@ import Table from 'react-bootstrap/Table';
 import {
   rNoughtWeeklyAverage, unknownInfectionFactorMedian,
   confirmedRecentCasesPer100K, estimatedRecentCasesPer100K,
-  deathFactor, recentDeaths,
+  deathFactor, recentDeaths, unknownInfectionFactorRange,
 } from './methodology';
 
 import language from './language.json';
-import { r0AlertLevel, r0Summary, projectionPhrase, needsDisclaimer } from './thresholds';
+import {
+  recentCasesAlertLevel,
+  r0AlertLevel,
+  r0Summary,
+  projectionPhrase,
+  needsDisclaimer,
+} from './thresholds';
 
 
-function Header(props) {
-  const { country } = props;
+function Header() {
   return (
     <Navbar bg="dark" variant="dark">
       <Navbar.Brand>
@@ -30,29 +35,37 @@ function Header(props) {
   );
 }
 
-Header.propTypes = {
-  country: PropTypes.string.isRequired,
-};
-
-
 function CurrentSituation(props) {
   const {
     country, cases, deaths, population,
   } = props;
-  const r0 = rNoughtWeeklyAverage(cases);
+  const recent = confirmedRecentCasesPer100K(cases, population);
+  const unknownInfectionsRange = unknownInfectionFactorRange(cases, deaths);
   return (
     <Col md>
       <Card className="mt-4">
         <Card.Body>
-          <Card.Title>Current Situation in {country}</Card.Title>
+          <Card.Title>
+            Current Situation in&nbsp;
+            {country}
+          </Card.Title>
           <Card.Text>
             <p>
-              {language.RNOUGHT.replace('{country}', country)}
+              {language.RECENTCASES.replace('{country}', country)}
             </p>
-            <Alert variant={r0AlertLevel(r0)}>
-              r<sub>0</sub> =&nbsp;
-              {r0.toFixed(1)}
+            <Alert variant={recentCasesAlertLevel(recent)}>
+              {recent.toFixed(0)}
+              &nbsp;per 100,000 inhabitants
             </Alert>
+            <p>
+              {language.RECENTCASESEXPL}
+            </p>
+            <p>
+              {language.DUNKELZIFFER
+                .replace(/{country}/g, country)
+                .replace(/{low}/g, unknownInfectionsRange.low.toFixed(0))
+                .replace(/{high}/g, unknownInfectionsRange.high.toFixed(0))}
+            </p>
           </Card.Text>
         </Card.Body>
       </Card>
@@ -174,7 +187,7 @@ function CovidApp(props) {
   } = props;
   return (
     <div className="App">
-      <Header country={country} />
+      <Header />
       <Container>
         <Row>
           <CurrentSituation
