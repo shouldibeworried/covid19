@@ -16,7 +16,7 @@ import {
 } from './methodology';
 
 import language from './language.json';
-import { r0AlertLevel, projectionPhrase } from './thresholds';
+import { r0AlertLevel, r0Summary, projectionPhrase, needsDisclaimer } from './thresholds';
 
 
 function Header(props) {
@@ -24,9 +24,7 @@ function Header(props) {
   return (
     <Navbar bg="dark" variant="dark">
       <Navbar.Brand>
-        Should I be worried about Covid-19 in&nbsp;
-        {country}
-        ?
+        Should I be worried about Covid-19?
       </Navbar.Brand>
     </Navbar>
   );
@@ -46,7 +44,7 @@ function CurrentSituation(props) {
     <Col md>
       <Card className="mt-4">
         <Card.Body>
-          <Card.Title>Current Situation</Card.Title>
+          <Card.Title>Current Situation in {country}</Card.Title>
           <Card.Text>
             <p>
               {language.RNOUGHT.replace('{country}', country)}
@@ -81,7 +79,10 @@ function Outlook(props) {
     <Col md>
       <Card className="mt-4">
         <Card.Body>
-          <Card.Title>Outlook</Card.Title>
+          <Card.Title>
+            Outlook for&nbsp;
+            {country}
+          </Card.Title>
           <Card.Text>
             <p>
               {language.RNOUGHT.replace(/{country}/g, country)}
@@ -93,9 +94,12 @@ function Outlook(props) {
               {r0.toFixed(1)}
             </Alert>
             <p>
-              {language.RNOUGHTEXPL}
+              {language.RNOUGHTEXPL
+                .replace(/{country}/g, country)
+                .replace(/{summary}/g, r0Summary(r0))}
             </p>
             <p>
+              {needsDisclaimer(r0, df) ? language.PROJECTIONDISCLAIMER : ''}
               {language.DEATHPROJECTION
                 .replace(/{country}/g, country)
                 .replace(/{recentDeaths}/g, d)

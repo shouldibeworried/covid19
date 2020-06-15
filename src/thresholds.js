@@ -4,6 +4,14 @@ const r0AlertLevels = new Map([
 ]);
 const defaultR0AlertLevel = 'danger';
 
+const r0Summaries = new Map([
+  [0.95, 'going down'],
+  [1.05, 'more or less staying the same'],
+  [1.5, 'growing exponentially'],
+]);
+const defaultR0Summary = 'growing exponentially at a high rate';
+
+
 const projectionPhrases = new Map([
   [0.5, 'less than half as many'],
   [0.9, 'a smaller number of'],
@@ -23,5 +31,10 @@ const checkLevel = (levels, defaultValue) => (
   }
 );
 
+export const needsDisclaimer = (r0, deathsFactor) => (
+  ((r0 > 1.05) && (deathsFactor < 1.1)) || ((r0 < 0.95) && (deathsFactor > 0.9))
+);
+
 export const r0AlertLevel = checkLevel(r0AlertLevels, defaultR0AlertLevel);
+export const r0Summary = checkLevel(r0Summaries, defaultR0Summary);
 export const projectionPhrase = checkLevel(projectionPhrases, defaultProjectionPhrase);
