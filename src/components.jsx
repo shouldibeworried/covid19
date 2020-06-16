@@ -5,6 +5,9 @@ import Alert from 'react-bootstrap/Alert';
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
+import Form from 'react-bootstrap/Form';
+import FormControl from 'react-bootstrap/FormControl';
+import InputGroup from 'react-bootstrap/InputGroup';
 import Navbar from 'react-bootstrap/Navbar';
 import Row from 'react-bootstrap/Row';
 import Table from 'react-bootstrap/Table';
@@ -27,10 +30,18 @@ import {
 
 function Header() {
   return (
-    <Navbar bg="dark" variant="dark">
+    <Navbar bg="dark" variant="dark" className="justify-content-between">
       <Navbar.Brand>
-        Should I be worried about Covid-19?
+        Should I be worried?
       </Navbar.Brand>
+      <Form inline>
+        <InputGroup>
+          <FormControl
+            placeholder="Country/State/Province"
+            aria-label="European Country, US State, or Canadian Province"
+          />
+        </InputGroup>
+      </Form>
     </Navbar>
   );
 }
