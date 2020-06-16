@@ -6,8 +6,6 @@ import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
-import FormControl from 'react-bootstrap/FormControl';
-import InputGroup from 'react-bootstrap/InputGroup';
 import Navbar from 'react-bootstrap/Navbar';
 import Row from 'react-bootstrap/Row';
 import Table from 'react-bootstrap/Table';
@@ -28,23 +26,47 @@ import {
 } from './thresholds';
 
 
-function Header() {
+function Header(props) {
+  const { country, eu, na } = props;
   return (
     <Navbar bg="dark" variant="dark" className="justify-content-between">
       <Navbar.Brand>
         Should I be worried?
       </Navbar.Brand>
       <Form inline>
-        <InputGroup>
-          <FormControl
-            placeholder="Country/State/Province"
-            aria-label="European Country, US State, or Canadian Province"
-          />
-        </InputGroup>
+        <Form.Control
+          placeholder="Country/State/Province"
+          aria-label="European Country, US State, or Canadian Province"
+          title="European Country, US State, or Canadian Province"
+          as="select"
+          value={country}
+        >
+          <optgroup label="Europe">
+            {eu.map((c) => (
+              <option>
+                {c}
+              </option>
+            ))}
+          </optgroup>
+          <optgroup label="North America">
+            {na.map((c) => (
+              <option>
+                {c}
+              </option>
+            ))}
+          </optgroup>
+        </Form.Control>
       </Form>
     </Navbar>
   );
 }
+
+Header.propTypes = {
+  country: PropTypes.string.isRequired,
+  eu: PropTypes.arrayOf(PropTypes.string).isRequired,
+  na: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
+
 
 function CurrentSituation(props) {
   const {
@@ -194,11 +216,11 @@ SummaryTable.propTypes = {
 
 function CovidApp(props) {
   const {
-    country, cases, deaths, population,
+    country, cases, deaths, population, eu, na,
   } = props;
   return (
     <div className="App">
-      <Header />
+      <Header country={country} eu={eu} na={na} />
       <Container>
         <Row>
           <CurrentSituation
@@ -226,6 +248,8 @@ CovidApp.propTypes = {
   cases: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
   deaths: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
   population: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
+  eu: PropTypes.arrayOf(PropTypes.string).isRequired,
+  na: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 
