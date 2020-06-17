@@ -30,53 +30,67 @@ import na from './data/na.json';
 import population from './data/population.json';
 
 
-function Header(props) {
-  const { country, eu, na } = props;
-  return (
-    <Navbar bg="dark" variant="dark" className="justify-content-between">
-      <Navbar.Brand>
-        Should I be worried?
-      </Navbar.Brand>
-      <Form inline>
-        <Form.Control
-          placeholder="Country/State/Province"
-          aria-label="European Country, US State, or Canadian Province"
-          title="European Country, US State, or Canadian Province"
-          as="select"
-          value={country}
-        >
-          <optgroup label="Europe">
-            {eu.map((c) => (
-              <option>
-                {c}
-              </option>
-            ))}
-          </optgroup>
-          <optgroup label="North America">
-            {na.map((c) => (
-              <option>
-                {c}
-              </option>
-            ))}
-          </optgroup>
-        </Form.Control>
-      </Form>
-    </Navbar>
-  );
+class Header extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleFilterChange = this.handleFilterChange.bind(this);
+  }
+
+  handleFilterChange(e) {
+    const { onFilterChange } = this.props;
+    onFilterChange(e.target.value);
+  }
+
+  render() {
+    const { country, europe, america } = this.props;
+    return (
+      <Navbar bg="dark" variant="dark" className="justify-content-between">
+        <Navbar.Brand>
+          Should I be worried?
+        </Navbar.Brand>
+        <Form inline>
+          <Form.Control
+            placeholder="Country/State/Province"
+            aria-label="European Country, US State, or Canadian Province"
+            title="European Country, US State, or Canadian Province"
+            as="select"
+            value={country}
+            onChange={this.handleFilterChange}
+          >
+            <optgroup label="Europe">
+              {europe.map((c) => (
+                <option>
+                  {c}
+                </option>
+              ))}
+            </optgroup>
+            <optgroup label="North America">
+              {america.map((c) => (
+                <option>
+                  {c}
+                </option>
+              ))}
+            </optgroup>
+          </Form.Control>
+        </Form>
+      </Navbar>
+    );
+  }
 }
 
 Header.propTypes = {
   country: PropTypes.string.isRequired,
-  eu: PropTypes.arrayOf(PropTypes.string).isRequired,
-  na: PropTypes.arrayOf(PropTypes.string).isRequired,
+  europe: PropTypes.arrayOf(PropTypes.string).isRequired,
+  america: PropTypes.arrayOf(PropTypes.string).isRequired,
+  onFilterChange: PropTypes.func.isRequired,
 };
 
 
 function CurrentSituation(props) {
   const {
-    country, cases, deaths, population,
+    country, cases, deaths, localPopulation,
   } = props;
-  const recent = confirmedRecentCasesPer100K(cases, population);
+  const recent = confirmedRecentCasesPer100K(cases, localPopulation);
   const unknownInfectionsRange = unknownInfectionFactorRange(cases, deaths);
   return (
     <Col md>
@@ -114,7 +128,7 @@ CurrentSituation.propTypes = {
   country: PropTypes.string.isRequired,
   cases: PropTypes.arrayOf(PropTypes.number).isRequired,
   deaths: PropTypes.arrayOf(PropTypes.number).isRequired,
-  population: PropTypes.arrayOf(PropTypes.number).isRequired,
+  localPopulation: PropTypes.arrayOf(PropTypes.number).isRequired,
 };
 
 
@@ -224,6 +238,11 @@ class CovidApp extends React.Component {
     this.state = {
       country: 'California',
     };
+    this.handleFilterChange = this.handleFilterChange.bind(this);
+  }
+
+  handleFilterChange(country) {
+    this.setState({ country });
   }
 
   render() {
@@ -232,14 +251,19 @@ class CovidApp extends React.Component {
     const deaths = country in eu.deaths ? eu.deaths : na.deaths;
     return (
       <div className="App">
-        <Header country={country} eu={Object.keys(eu.cases)} na={Object.keys(na.cases)} />
+        <Header
+          country={country}
+          europe={Object.keys(eu.cases)}
+          america={Object.keys(na.cases)}
+          onFilterChange={this.handleFilterChange}
+        />
         <Container>
           <Row>
             <CurrentSituation
               country={country}
               cases={cases[country]}
               deaths={deaths[country]}
-              population={population[country]}
+              localPopulation={population[country]}
             />
             <Outlook
               country={country}
