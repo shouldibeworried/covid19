@@ -4,10 +4,8 @@ import PropTypes from 'prop-types';
 import Alert from 'react-bootstrap/Alert';
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
-import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Navbar from 'react-bootstrap/Navbar';
-import Row from 'react-bootstrap/Row';
 import Table from 'react-bootstrap/Table';
 
 import {
@@ -25,12 +23,7 @@ import {
   needsDisclaimer,
 } from './thresholds';
 
-import eu from './data/eu.json';
-import na from './data/na.json';
-import population from './data/population.json';
-
-
-class Header extends React.Component {
+export class Header extends React.Component {
   constructor(props) {
     super(props);
     this.handleFilterChange = this.handleFilterChange.bind(this);
@@ -57,16 +50,16 @@ class Header extends React.Component {
             value={country}
             onChange={this.handleFilterChange}
           >
-            <optgroup label="Europe">
-              {europe.map((c) => (
-                <option>
+            <optgroup label="North America">
+              {america.map((c) => (
+                <option key={c}>
                   {c}
                 </option>
               ))}
             </optgroup>
-            <optgroup label="North America">
-              {america.map((c) => (
-                <option>
+            <optgroup label="Europe">
+              {europe.map((c) => (
+                <option key={c}>
                   {c}
                 </option>
               ))}
@@ -86,7 +79,7 @@ Header.propTypes = {
 };
 
 
-function CurrentSituation(props) {
+export function CurrentSituation(props) {
   const {
     country, cases, deaths, localPopulation,
   } = props;
@@ -101,22 +94,20 @@ function CurrentSituation(props) {
             {country}
           </Card.Title>
           <Card.Text>
-            <p>
-              {language.RECENTCASES.replace('{country}', country)}
-            </p>
-            <Alert variant={recentCasesAlertLevel(recent)}>
-              {recent.toFixed(0)}
-              &nbsp;per 100,000 inhabitants
-            </Alert>
-            <p>
-              {language.RECENTCASESEXPL}
-            </p>
-            <p>
-              {language.DUNKELZIFFER
-                .replace(/{country}/g, country)
-                .replace(/{low}/g, unknownInfectionsRange.low.toFixed(0))
-                .replace(/{high}/g, unknownInfectionsRange.high.toFixed(0))}
-            </p>
+            {language.RECENTCASES.replace('{country}', country)}
+          </Card.Text>
+          <Alert variant={recentCasesAlertLevel(recent)}>
+            {recent.toFixed(0)}
+            &nbsp;per 100,000 inhabitants
+          </Alert>
+          <Card.Text>
+            {language.RECENTCASESEXPL}
+          </Card.Text>
+          <Card.Text>
+            {language.DUNKELZIFFER
+              .replace(/{country}/g, country)
+              .replace(/{low}/g, unknownInfectionsRange.low.toFixed(0))
+              .replace(/{high}/g, unknownInfectionsRange.high.toFixed(0))}
           </Card.Text>
         </Card.Body>
       </Card>
@@ -128,11 +119,11 @@ CurrentSituation.propTypes = {
   country: PropTypes.string.isRequired,
   cases: PropTypes.arrayOf(PropTypes.number).isRequired,
   deaths: PropTypes.arrayOf(PropTypes.number).isRequired,
-  localPopulation: PropTypes.arrayOf(PropTypes.number).isRequired,
+  localPopulation: PropTypes.number.isRequired,
 };
 
 
-function Outlook(props) {
+export function Outlook(props) {
   const {
     country, cases, deaths,
   } = props;
@@ -148,27 +139,25 @@ function Outlook(props) {
             {country}
           </Card.Title>
           <Card.Text>
-            <p>
-              {language.RNOUGHT.replace(/{country}/g, country)}
-            </p>
-            <Alert variant={r0AlertLevel(r0)}>
-              r
-              <sub>0</sub>
-              &nbsp;=&nbsp;
-              {r0.toFixed(1)}
-            </Alert>
-            <p>
-              {language.RNOUGHTEXPL
-                .replace(/{country}/g, country)
-                .replace(/{summary}/g, r0Summary(r0))}
-            </p>
-            <p>
-              {needsDisclaimer(r0, df) ? language.PROJECTIONDISCLAIMER : ''}
-              {language.DEATHPROJECTION
-                .replace(/{country}/g, country)
-                .replace(/{recentDeaths}/g, d)
-                .replace(/{projectionPhrase}/g, projectionPhrase(df))}
-            </p>
+            {language.RNOUGHT.replace(/{country}/g, country)}
+          </Card.Text>
+          <Alert variant={r0AlertLevel(r0)}>
+            r
+            <sub>0</sub>
+            &nbsp;=&nbsp;
+            {r0.toFixed(1)}
+          </Alert>
+          <Card.Text>
+            {language.RNOUGHTEXPL
+              .replace(/{country}/g, country)
+              .replace(/{summary}/g, r0Summary(r0))}
+          </Card.Text>
+          <Card.Text>
+            {needsDisclaimer(r0, df) ? language.PROJECTIONDISCLAIMER : ''}
+            {language.DEATHPROJECTION
+              .replace(/{country}/g, country)
+              .replace(/{recentDeaths}/g, d)
+              .replace(/{projectionPhrase}/g, projectionPhrase(df))}
           </Card.Text>
         </Card.Body>
       </Card>
@@ -183,7 +172,7 @@ Outlook.propTypes = {
 };
 
 
-function SummaryTable(props) {
+export function SummaryTable(props) {
   const { cases, deaths, population } = props;
   return (
     <Table>
@@ -228,56 +217,5 @@ function SummaryTable(props) {
 SummaryTable.propTypes = {
   cases: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
   deaths: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
-  population: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
+  population: PropTypes.objectOf(PropTypes.number).isRequired,
 };
-
-
-class CovidApp extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      country: 'California',
-    };
-    this.handleFilterChange = this.handleFilterChange.bind(this);
-  }
-
-  handleFilterChange(country) {
-    this.setState({ country });
-  }
-
-  render() {
-    const { country } = this.state;
-    const cases = country in eu.cases ? eu.cases : na.cases;
-    const deaths = country in eu.deaths ? eu.deaths : na.deaths;
-    return (
-      <div className="App">
-        <Header
-          country={country}
-          europe={Object.keys(eu.cases)}
-          america={Object.keys(na.cases)}
-          onFilterChange={this.handleFilterChange}
-        />
-        <Container>
-          <Row>
-            <CurrentSituation
-              country={country}
-              cases={cases[country]}
-              deaths={deaths[country]}
-              localPopulation={population[country]}
-            />
-            <Outlook
-              country={country}
-              cases={cases[country]}
-              deaths={deaths[country]}
-            />
-          </Row>
-          <Row>
-            <SummaryTable cases={cases} deaths={deaths} population={population} />
-          </Row>
-        </Container>
-      </div>
-    );
-  }
-}
-
-export default CovidApp;
