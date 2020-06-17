@@ -25,6 +25,10 @@ import {
   needsDisclaimer,
 } from './thresholds';
 
+import eu from './data/eu.json';
+import na from './data/na.json';
+import population from './data/population.json';
+
 
 function Header(props) {
   const { country, eu, na } = props;
@@ -214,43 +218,42 @@ SummaryTable.propTypes = {
 };
 
 
-function CovidApp(props) {
-  const {
-    country, cases, deaths, population, eu, na,
-  } = props;
-  return (
-    <div className="App">
-      <Header country={country} eu={eu} na={na} />
-      <Container>
-        <Row>
-          <CurrentSituation
-            country={country}
-            cases={cases[country]}
-            deaths={deaths[country]}
-            population={population[country]}
-          />
-          <Outlook
-            country={country}
-            cases={cases[country]}
-            deaths={deaths[country]}
-          />
-        </Row>
-        <Row>
-          <SummaryTable cases={cases} deaths={deaths} population={population} />
-        </Row>
-      </Container>
-    </div>
-  );
+class CovidApp extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      country: 'California',
+    };
+  }
+
+  render() {
+    const { country } = this.state;
+    const cases = country in eu.cases ? eu.cases : na.cases;
+    const deaths = country in eu.deaths ? eu.deaths : na.deaths;
+    return (
+      <div className="App">
+        <Header country={country} eu={Object.keys(eu.cases)} na={Object.keys(na.cases)} />
+        <Container>
+          <Row>
+            <CurrentSituation
+              country={country}
+              cases={cases[country]}
+              deaths={deaths[country]}
+              population={population[country]}
+            />
+            <Outlook
+              country={country}
+              cases={cases[country]}
+              deaths={deaths[country]}
+            />
+          </Row>
+          <Row>
+            <SummaryTable cases={cases} deaths={deaths} population={population} />
+          </Row>
+        </Container>
+      </div>
+    );
+  }
 }
-
-CovidApp.propTypes = {
-  country: PropTypes.string.isRequired,
-  cases: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
-  deaths: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
-  population: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
-  eu: PropTypes.arrayOf(PropTypes.string).isRequired,
-  na: PropTypes.arrayOf(PropTypes.string).isRequired,
-};
-
 
 export default CovidApp;
