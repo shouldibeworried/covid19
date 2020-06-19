@@ -1,7 +1,7 @@
 const recentCasesAlertLevels = new Map([
   [0.5, 'success'],
   [10, 'info'],
-  [50, 'warning']
+  [50, 'warning'],
 ]);
 const defaultRecentCasesAlertLevel = 'danger';
 
@@ -31,6 +31,41 @@ const projectionPhrases = new Map([
 ]);
 const defaultProjectionPhrase = 'more than twenty times as many';
 
+export const confirmedCasesColors = new Map([
+  [1, '#ffffcc'],
+  [2.5, '#ffeda0'],
+  [5, '#fed976'],
+  [10, '#feb24c'],
+  [25, '#fd8d3c'],
+  [50, '#fc4e2a'],
+  [100, '#e31a1c'],
+  [100000, '#b10026'],
+]);
+export const defaultConfirmedCasesColor = '#eeeeee';
+
+export const estimatedCasesColors = new Map([
+  [10, '#ffffcc'],
+  [25, '#ffeda0'],
+  [50, '#fed976'],
+  [100, '#feb24c'],
+  [250, '#fd8d3c'],
+  [500, '#fc4e2a'],
+  [1000, '#e31a1c'],
+  [100000, '#b10026'],
+]);
+export const defaultEstimatedCasesColor = '#eeeeee';
+
+export const r0Colors = new Map([
+  [0.5, '#d73027'],
+  [0.75, '#f46d43'],
+  [0.95, '#fec779'],
+  [1.05, '#ffffbf'],
+  [1.5, '#c6e6f1'],
+  [2, '#74add1'],
+  [100, '#4575b4'],
+]);
+export const defaultR0Color = '#eeeeee';
+
 const checkLevel = (levels, defaultValue) => (
   (v) => {
     const l = Array.from(levels.keys()).find((level) => level > v);
@@ -49,3 +84,6 @@ export const recentCasesAlertLevel = checkLevel(
 export const r0AlertLevel = checkLevel(r0AlertLevels, defaultR0AlertLevel);
 export const r0Summary = checkLevel(r0Summaries, defaultR0Summary);
 export const projectionPhrase = checkLevel(projectionPhrases, defaultProjectionPhrase);
+export const r0Color = checkLevel(r0Colors, defaultR0Color);
+export const confirmedCasesColor = checkLevel(confirmedCasesColors, defaultConfirmedCasesColor);
+export const estimatedCasesColor = checkLevel(estimatedCasesColors, defaultEstimatedCasesColor);
