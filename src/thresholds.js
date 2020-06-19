@@ -56,13 +56,13 @@ export const estimatedCasesColors = new Map([
 export const defaultEstimatedCasesColor = '#eeeeee';
 
 export const r0Colors = new Map([
-  [0.5, '#d73027'],
-  [0.75, '#f46d43'],
-  [0.95, '#fec779'],
+  [0.5, '#4575b4'],
+  [0.75, '#74add1'],
+  [0.95, '#c6e6f1'],
   [1.05, '#ffffbf'],
-  [1.5, '#c6e6f1'],
-  [2, '#74add1'],
-  [100, '#4575b4'],
+  [1.5, '#fec779'],
+  [2, '#f46d43'],
+  [100, '#d73027'],
 ]);
 export const defaultR0Color = '#eeeeee';
 

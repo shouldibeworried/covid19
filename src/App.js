@@ -7,7 +7,12 @@ import Row from 'react-bootstrap/Row';
 import {
   Header, CurrentSituation, Outlook, SummaryTable,
 } from './components';
-import { naMap, euMap, Map } from './maps';
+import {
+  naMap,
+  euMap,
+  R0Map,
+  RecentCasesMap,
+} from './maps';
 
 import eu from './data/eu.json';
 import na from './data/na.json';
@@ -55,8 +60,8 @@ class App extends React.Component {
             />
           </Row>
           <Row>
-            <Map mapType={mapType} />
-            <Map mapType={mapType} />
+            <RecentCasesMap mapType={mapType} cases={cases} population={population} />
+            <R0Map mapType={mapType} cases={cases} />
           </Row>
           <Row>
             <SummaryTable cases={cases} deaths={deaths} population={population} />
