@@ -61,6 +61,18 @@ class App extends React.Component {
           <Row>
             <SummaryTable cases={cases} deaths={deaths} population={population} />
           </Row>
+          <Row>
+            <p>
+              Data:
+              <a href="https://github.com/CSSEGISandData/COVID-19">
+                Johns Hopkins University
+              </a>
+              ; maps adapted from:
+              <a href="https://www.naturalearthdata.com">
+                Natural Earth
+              </a>
+            </p>
+          </Row>
         </Container>
       </div>
     );
