@@ -36,40 +36,38 @@ const Map = (props) => {
   const { mapType, colorMap } = props;
   const { geoUrl, projection, projectionConfig } = mapType;
   return (
-    <Col md>
-      <Card className="mt-4">
-        <ComposableMap
-          projection={projection}
-          projectionConfig={projectionConfig}
-          viewBox="0 0 800 600"
-        >
-          <Geographies geography={geoUrl}>
-            {({ geographies }) => (
-              geographies.map((geo) => (
-                <Geography
-                  key={geo.rsmKey}
-                  geography={geo}
-                  fill={colorMap(geo.properties.NAME_EN)}
-                  stroke="grey"
-                />
-              ))
-            )}
-          </Geographies>
-        </ComposableMap>
-      </Card>
-    </Col>
+    <ComposableMap
+      projection={projection}
+      projectionConfig={projectionConfig}
+      viewBox="0 0 800 600"
+    >
+      <Geographies geography={geoUrl}>
+        {({ geographies }) => (
+          geographies.map((geo) => (
+            <Geography
+              key={geo.rsmKey}
+              geography={geo}
+              fill={colorMap(geo.properties.NAME_EN)}
+              stroke="grey"
+            />
+          ))
+        )}
+      </Geographies>
+    </ComposableMap>
   );
 };
 
+const propTypeMap = PropTypes.shape({
+  geoUrl: PropTypes.string,
+  projection: PropTypes.string,
+  projectionConfig: PropTypes.shape({
+    rotate: PropTypes.arrayOf(PropTypes.number),
+    scale: PropTypes.number,
+  }),
+});
+
 Map.propTypes = {
-  mapType: PropTypes.shape({
-    geoUrl: PropTypes.string,
-    projection: PropTypes.string,
-    projectionConfig: PropTypes.shape({
-      rotate: PropTypes.arrayOf(PropTypes.number),
-      scale: PropTypes.number,
-    }),
-  }).isRequired,
+  mapType: propTypeMap.isRequired,
   colorMap: PropTypes.func.isRequired,
 };
 
@@ -77,11 +75,24 @@ Map.propTypes = {
 export const R0Map = (props) => {
   const { mapType, cases } = props;
   const colorMap = colorMapFactory(
-    (name) => (name in cases ?  rNoughtWeeklyAverage(cases[name]) : NaN),
+    (name) => (name in cases ? rNoughtWeeklyAverage(cases[name]) : NaN),
     r0Color,
     defaultR0Color,
   );
-  return <Map mapType={mapType} colorMap={colorMap} />;
+  return (
+    <Col md>
+      <Card className="mt-4">
+        <Card.Body>
+          <Card.Title>
+            Basic Reproduction Factor
+          </Card.Title>
+          <Card.Text>
+            <Map mapType={mapType} colorMap={colorMap} />
+          </Card.Text>
+        </Card.Body>
+      </Card>
+    </Col>
+  );
 };
 
 R0Map.propTypes = {
@@ -103,7 +114,20 @@ export const RecentCasesMap = (props) => {
     confirmedCasesColor,
     defaultConfirmedCasesColor,
   );
-  return <Map mapType={mapType} colorMap={colorMap} />;
+  return (
+    <Col md>
+      <Card className="mt-4">
+        <Card.Body>
+          <Card.Title>
+            Recent New Cases per 100K Population
+          </Card.Title>
+          <Card.Text>
+            <Map mapType={mapType} colorMap={colorMap} />
+          </Card.Text>
+        </Card.Body>
+      </Card>
+    </Col>
+  );
 };
 
 RecentCasesMap.propTypes = {
