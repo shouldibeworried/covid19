@@ -32,14 +32,13 @@ const projectionPhrases = new Map([
 const defaultProjectionPhrase = 'more than twenty times as many';
 
 export const confirmedCasesColors = new Map([
-  [1, '#ffffcc'],
-  [2.5, '#ffeda0'],
-  [5, '#fed976'],
-  [10, '#feb24c'],
-  [25, '#fd8d3c'],
-  [50, '#fc4e2a'],
-  [100, '#e31a1c'],
-  [100000, '#b10026'],
+  [5, '#ffffcc'],
+  [10, '#ffeda0'],
+  [25, '#fed976'],
+  [50, '#fea044'],
+  [100, '#f03423'],
+  [250, '#ca0d21'],
+  [100000, '#a90025'],
 ]);
 export const defaultConfirmedCasesColor = '#eeeeee';
 
