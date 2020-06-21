@@ -12,6 +12,7 @@ import {
   rNoughtWeeklyAverage, unknownInfectionFactorMedian,
   confirmedRecentCasesPer100K, estimatedRecentCasesPer100K,
   deathFactor, recentDeaths, unknownInfectionFactorRange,
+  minDeathsPerMonth,
 } from './methodology';
 
 import language from './language.json';
@@ -84,7 +85,7 @@ export function CurrentSituation(props) {
     country, cases, deaths, localPopulation,
   } = props;
   const recent = confirmedRecentCasesPer100K(cases, localPopulation);
-  const unknownInfectionsRange = unknownInfectionFactorRange(cases, deaths);
+  const { low, high } = unknownInfectionFactorRange(cases, deaths);
   return (
     <Col md>
       <Card className="mt-4">
@@ -104,10 +105,12 @@ export function CurrentSituation(props) {
             {language.RECENTCASESEXPL}
           </Card.Text>
           <Card.Text>
-            {language.DUNKELZIFFER
-              .replace(/{country}/g, country)
-              .replace(/{low}/g, unknownInfectionsRange.low.toFixed(0))
-              .replace(/{high}/g, unknownInfectionsRange.high.toFixed(0))}
+            {(Number.isNaN(low) || Number.isNaN(high))
+              ? language.NODUNKELZIFFER
+              : language.DUNKELZIFFER
+                .replace(/{country}/g, country)
+                .replace(/{low}/g, low.toFixed(0))
+                .replace(/{high}/g, high.toFixed(0))}
           </Card.Text>
         </Card.Body>
       </Card>
@@ -138,27 +141,39 @@ export function Outlook(props) {
             Outlook for&nbsp;
             {country}
           </Card.Title>
-          <Card.Text>
-            {language.RNOUGHT.replace(/{country}/g, country)}
-          </Card.Text>
-          <Alert variant={r0AlertLevel(r0)}>
-            r
-            <sub>0</sub>
-            &nbsp;=&nbsp;
-            {r0.toFixed(1)}
-          </Alert>
-          <Card.Text>
-            {language.RNOUGHTEXPL
-              .replace(/{country}/g, country)
-              .replace(/{summary}/g, r0Summary(r0))}
-          </Card.Text>
-          <Card.Text>
-            {needsDisclaimer(r0, df) ? language.PROJECTIONDISCLAIMER : ''}
-            {language.DEATHPROJECTION
-              .replace(/{country}/g, country)
-              .replace(/{recentDeaths}/g, d)
-              .replace(/{projectionPhrase}/g, projectionPhrase(df))}
-          </Card.Text>
+          {Number.isNaN(r0)
+            ? (
+              <Card.Text>
+                {language.NORNOUGHT.replace(/{country}/g, country)}
+              </Card.Text>
+            )
+            : (
+              <div>
+                <Card.Text>
+                  {language.RNOUGHT.replace(/{country}/g, country)}
+                </Card.Text>
+                <Alert variant={r0AlertLevel(r0)}>
+                  r
+                  <sub>0</sub>
+                  &nbsp;=&nbsp;
+                  {r0.toFixed(1)}
+                </Alert>
+                <Card.Text>
+                  {language.RNOUGHTEXPL
+                    .replace(/{country}/g, country)
+                    .replace(/{summary}/g, r0Summary(r0))}
+                </Card.Text>
+                {!Number.isNaN(df) && (d > minDeathsPerMonth) && (
+                  <Card.Text>
+                    {needsDisclaimer(r0, df) ? language.PROJECTIONDISCLAIMER : ''}
+                    {language.DEATHPROJECTION
+                      .replace(/{country}/g, country)
+                      .replace(/{recentDeaths}/g, d)
+                      .replace(/{projectionPhrase}/g, projectionPhrase(df))}
+                  </Card.Text>
+                )}
+              </div>
+            )}
         </Card.Body>
       </Card>
     </Col>
