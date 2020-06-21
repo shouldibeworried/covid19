@@ -36,6 +36,7 @@ class App extends React.Component {
     const { country } = this.state;
     const cases = country in eu.cases ? eu.cases : na.cases;
     const deaths = country in eu.deaths ? eu.deaths : na.deaths;
+    const lastUpdatedDate = country in eu.cases ? eu.dates.slice(-1)[0] : na.dates.slice(-1)[0];
     const mapType = country in eu.cases ? euMap : naMap;
     return (
       <div className="App">
@@ -73,14 +74,17 @@ class App extends React.Component {
           </Row>
           <Row>
             <p>
-              Data:
+              Data:&nbsp;
               <a href="https://github.com/CSSEGISandData/COVID-19">
                 Johns Hopkins University
               </a>
-              ; maps adapted from:
+              ; maps adapted from:&nbsp;
               <a href="https://www.naturalearthdata.com">
                 Natural Earth
               </a>
+              ; data last updated on&nbsp;
+              {lastUpdatedDate}
+              ;
             </p>
           </Row>
         </Container>
