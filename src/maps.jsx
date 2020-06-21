@@ -3,9 +3,11 @@ import PropTypes from 'prop-types';
 
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
+import ToggleButton from 'react-bootstrap/ToggleButton';
+import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 
-import { rNoughtWeeklyAverage, confirmedRecentCasesPer100K } from './methodology';
+import { rNoughtWeeklyAverage, confirmedRecentCasesPer100K, estimatedRecentCasesPer100K } from './methodology';
 import {
   r0Color,
   r0Colors,
@@ -13,6 +15,9 @@ import {
   confirmedCasesColor,
   confirmedCasesColors,
   defaultConfirmedCasesColor,
+  estimatedCasesColor,
+  estimatedCasesColors,
+  defaultEstimatedCasesColor,
 } from './thresholds';
 
 
@@ -151,32 +156,86 @@ R0Map.propTypes = {
   cases: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
 };
 
-export const RecentCasesMap = (props) => {
-  const { mapType, cases, population } = props;
-  const colorMap = colorMapFactory(
-    (name) => (name in cases ? confirmedRecentCasesPer100K(cases[name], population[name]) : NaN),
-    confirmedCasesColor,
-    defaultConfirmedCasesColor,
-  );
+
+const ConfirmedEstdToggle = (props) => {
+  const { showEstimated, onToggleChange } = props;
+
   return (
-    <Col md>
-      <Card className="mt-4">
-        <Card.Body>
-          <Card.Title>
-            Recent New Cases per 100K Population
-          </Card.Title>
-          <Card.Text>
-            <Map mapType={mapType} colorMap={colorMap} />
-            <Legend colorMap={confirmedCasesColors} />
-          </Card.Text>
-        </Card.Body>
-      </Card>
-    </Col>
+    <ToggleButtonGroup type="radio" name="conf-estd" value={showEstimated} onChange={onToggleChange}>
+      <ToggleButton variant="light" value={false}>Confirmed</ToggleButton>
+      <ToggleButton variant="light" value={true}>Estimated</ToggleButton>
+    </ToggleButtonGroup>
   );
 };
+ConfirmedEstdToggle.propTypes = {
+  showEstimated: PropTypes.bool.isRequired,
+  onToggleChange: PropTypes.func.isRequired,
+};
+
+export class RecentCasesMap extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showEstimated: false,
+    };
+    this.handleToggleChange = this.handleToggleChange.bind(this);
+  }
+
+  handleToggleChange(showEstimated) {
+    this.setState({ showEstimated });
+  }
+
+  render() {
+    const {
+      mapType,
+      cases,
+      deaths,
+      population,
+    } = this.props;
+    const { showEstimated } = this.state;
+    let colorMap;
+    if (showEstimated) {
+      colorMap = colorMapFactory(
+        (name) => (name in cases
+          ? estimatedRecentCasesPer100K(cases[name], deaths[name], population[name])
+          : NaN),
+        estimatedCasesColor,
+        defaultEstimatedCasesColor,
+      );
+    } else {
+      colorMap = colorMapFactory(
+        (name) => (name in cases
+          ? confirmedRecentCasesPer100K(cases[name], population[name])
+          : NaN),
+        confirmedCasesColor,
+        defaultConfirmedCasesColor,
+      );
+    }
+    return (
+      <Col md>
+        <Card className="mt-4">
+          <Card.Body>
+            <Card.Title>
+              Recent New Cases per 100K Population
+            </Card.Title>
+            <Card.Text>
+              <Map mapType={mapType} colorMap={colorMap} />
+              <Legend colorMap={showEstimated ? estimatedCasesColors : confirmedCasesColors} />
+            </Card.Text>
+            <ConfirmedEstdToggle
+              showEstimated={showEstimated}
+              onToggleChange={this.handleToggleChange}
+            />
+          </Card.Body>
+        </Card>
+      </Col>
+    );
+  }
+}
 
 RecentCasesMap.propTypes = {
   mapType: propTypeMap.isRequired,
   cases: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
+  deaths: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
   population: PropTypes.objectOf(PropTypes.number).isRequired,
 };
