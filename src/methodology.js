@@ -1,11 +1,15 @@
 const week = 7;
 const month = 30;
+
 const genLen = 6;
+const deathOffset = 16;
+
 const infectionFatalityMin = 0.003;
 const infectionFatalityMax = 0.013;
 const infectionFatalityMed = 0.008;
 
-const deathOffset = 16;
+const minCasesPerGeneration = 50;
+const minDeathsPerMonth = 50;
 
 
 const geoMean = (sequence) => (
@@ -33,10 +37,10 @@ export const rNoughtWeeklyAverage = (cases) => geoMean(rNoughtSequence(cases).sl
 const caseFatality = (cases, deaths) => {
   const nCases = (
     cases[cases.length - 1 - deathOffset]
-    - cases[cases.length - 1 - 2 * deathOffset]
+    - cases[cases.length - 1 - deathOffset - month]
   );
   const nDeaths = (
-    deaths[cases.length - 1] - deaths[cases.length - 1 - deathOffset]
+    deaths[cases.length - 1] - deaths[cases.length - 1 - month]
   );
 
   return nDeaths / nCases;
