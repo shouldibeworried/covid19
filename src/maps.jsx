@@ -80,9 +80,9 @@ Map.propTypes = {
 
 
 const LegendEntry = (props) => {
-  const { key, text, color } = props;
+  const { text, color } = props;
   return (
-    <span key={key} style={{ paddingRight: '10px', display: 'inline-block' }}>
+    <span style={{ paddingRight: '10px', display: 'inline-block' }}>
       <svg
         className="bi bi-square-fill"
         width="1em"
@@ -100,16 +100,14 @@ const LegendEntry = (props) => {
 };
 
 LegendEntry.propTypes = {
-  key: PropTypes.number.isRequired,
   text: PropTypes.string.isRequired,
   color: PropTypes.string.isRequired,
 };
 
 const Legend = (props) => {
-  const { colorMap } = props;
-  const colorArray = Array.from(colorMap);
+  const { colorArray } = props;
   return (
-    <div>
+    <div style={{ margin: '5px 0' }}>
       {colorArray.slice(0, -1).map(([key, value]) => (
         <LegendEntry key={key} text={` < ${key}`} color={value} />
       ))}
@@ -123,7 +121,7 @@ const Legend = (props) => {
 };
 
 Legend.propTypes = {
-  colorMap: PropTypes.instanceOf(Map).isRequired,
+  colorArray: PropTypes.arrayOf(PropTypes.oneOfType(PropTypes.number, PropTypes.string)).isRequired,
 };
 
 
@@ -141,10 +139,8 @@ export const R0Map = (props) => {
           <Card.Title>
             Basic Reproduction Factor
           </Card.Title>
-          <Card.Text>
-            <Map mapType={mapType} colorMap={colorMap} />
-            <Legend colorMap={r0Colors} />
-          </Card.Text>
+          <Map mapType={mapType} colorMap={colorMap} />
+          <Legend colorArray={Array.from(r0Colors)} />
         </Card.Body>
       </Card>
     </Col>
@@ -218,10 +214,11 @@ export class RecentCasesMap extends React.Component {
             <Card.Title>
               Recent New Cases per 100K Population
             </Card.Title>
-            <Card.Text>
-              <Map mapType={mapType} colorMap={colorMap} />
-              <Legend colorMap={showEstimated ? estimatedCasesColors : confirmedCasesColors} />
-            </Card.Text>
+            <Map mapType={mapType} colorMap={colorMap} />
+            <Legend colorArray={showEstimated
+              ? Array.from(estimatedCasesColors)
+              : Array.from(confirmedCasesColors)}
+            />
             <ConfirmedEstdToggle
               showEstimated={showEstimated}
               onToggleChange={this.handleToggleChange}
