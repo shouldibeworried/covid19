@@ -91,7 +91,7 @@ export function CurrentSituation(props) {
       <Card className="mt-4">
         <Card.Body>
           <Card.Title>
-            Current Situation in&nbsp;
+            Current situation in&nbsp;
             {country}
           </Card.Title>
           <Card.Text>

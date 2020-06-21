@@ -137,7 +137,7 @@ export const R0Map = (props) => {
       <Card className="mt-4">
         <Card.Body>
           <Card.Title>
-            Basic Reproduction Factor
+            Basic reproduction factor
           </Card.Title>
           <Map mapType={mapType} colorMap={colorMap} />
           <Legend colorArray={Array.from(r0Colors)} />
@@ -212,7 +212,7 @@ export class RecentCasesMap extends React.Component {
         <Card className="mt-4">
           <Card.Body>
             <Card.Title>
-              Recent New Cases per 100K Population
+              New cases over the last 7 days per 100K population
             </Card.Title>
             <Map mapType={mapType} colorMap={colorMap} />
             <Legend colorArray={showEstimated
