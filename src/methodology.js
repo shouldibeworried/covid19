@@ -1,7 +1,7 @@
 const week = 7;
 const month = 30;
 
-const genLen = 6;
+const genLen = 5;
 const deathOffset = 16;
 
 const infectionFatalityMin = 0.003;
@@ -9,7 +9,7 @@ const infectionFatalityMax = 0.013;
 const infectionFatalityMed = 0.008;
 
 const minCasesPerGeneration = 40;
-const minDeathsPerMonth = 30;
+export const minDeathsPerMonth = 30;
 const caseFatalityMin = 0.005;
 
 

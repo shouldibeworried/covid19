@@ -2,8 +2,10 @@
   "RECENTCASES": "The number of people who have tested positive for Covid-19 in {country} within the past 7 days is:",
   "RECENTCASESEXPL": "People who have recently become infected are the ones who can pass the disease on to others.",
   "DUNKELZIFFER": "This number only includes confirmed infections. The number of reported deaths in {country} suggests that, in reality, there might be {low} to {high} times as many recent infections.",
+  "NODUNKELZIFFER": "This number only includes confirmed infections. The true number is probably considerably higher, but based on the existing data it is hard to guess by how much.",
   "RNOUGHT": "On average, over the past 7 days, Covid-19's basic reproduction number in {country} has been approximately:",
   "RNOUGHTEXPL": "This means that the number of infections in {country} is {summary}.",
+  "NORNOUGHT": "There isn't enough disease activity in {country} to estimate the basic reproduction number. That's a good thing.",
   "PROJECTIONDISCLAIMER": "It might take a while before this is reflected in the number of deaths, though. ",
   "DEATHPROJECTION": "Over the past 30 days, {recentDeaths} people in {country} have died of Covid-19. If {country} remains on its current trajectory, expect to see {projectionPhrase} deaths from Covid-19 over the next 30 days."
 }
