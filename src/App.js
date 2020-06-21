@@ -17,14 +17,14 @@ import {
 import eu from './data/eu.json';
 import na from './data/na.json';
 import population from './data/population.json';
+import pickAPlace from './pickAPlace';
 
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      country: 'California',
-    };
+    const country = pickAPlace();
+    this.state = { country };
     this.handleFilterChange = this.handleFilterChange.bind(this);
   }
 
@@ -60,7 +60,12 @@ class App extends React.Component {
             />
           </Row>
           <Row>
-            <RecentCasesMap mapType={mapType} cases={cases} deaths={deaths} population={population} />
+            <RecentCasesMap
+              mapType={mapType}
+              cases={cases}
+              deaths={deaths}
+              population={population}
+            />
             <R0Map mapType={mapType} cases={cases} />
           </Row>
           <Row>
