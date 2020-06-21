@@ -8,8 +8,9 @@ const infectionFatalityMin = 0.003;
 const infectionFatalityMax = 0.013;
 const infectionFatalityMed = 0.008;
 
-const minCasesPerGeneration = 50;
+const minCasesPerGeneration = 40;
 const minDeathsPerMonth = 30;
+const caseFatalityMin = 0.005;
 
 
 const geoMean = (sequence) => (
@@ -50,7 +51,14 @@ const caseFatality = (cases, deaths) => {
     return NaN;
   }
 
-  return nDeaths / nCases;
+  const cf = nDeaths / nCases;
+
+  if (cf < caseFatalityMin) {
+    // this indicates underreporting of deaths
+    return { low: NaN, high: NaN };
+  }
+
+  return cf;
 };
 
 
@@ -58,22 +66,13 @@ export const unknownInfectionFactorRange = (cases, deaths) => {
   const cf = caseFatality(cases, deaths);
   const low = cf / infectionFatalityMax;
   const high = cf / infectionFatalityMin;
-  if (low < 1) {
-    // this indicates underreporting of deaths
-    return { low: NaN, high: NaN };
-  }
   return { low, high };
 };
 
 
-export const unknownInfectionFactorMedian = (cases, deaths) => {
-  const { low } = unknownInfectionFactorRange(cases, deaths);
-  if (Number.isNaN(low)) {
-    return NaN;
-  }
-
-  return caseFatality(cases, deaths) / infectionFatalityMed;
-};
+export const unknownInfectionFactorMedian = (cases, deaths) => (
+  caseFatality(cases, deaths) / infectionFatalityMed
+);
 
 
 const recentCases = (cases) => {
