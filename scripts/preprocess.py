@@ -12,12 +12,25 @@ EUROPE = ["Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus", "Czechia",
           "Lithuania", "Luxembourg", "Malta", "Netherlands", "Norway", "Poland",
           "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Sweden",
           "Switzerland", "United Kingdom"]
-
+US = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado",
+      "Connecticut", "Delaware", "District of Columbia", "Florida", "Georgia",
+      "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky",
+      "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan",
+      "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada",
+      "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina",
+      "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania",
+      "Puerto Rico", "Rhode Island", "South Carolina", "South Dakota",
+      "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington",
+      "West Virginia", "Wisconsin", "Wyoming"] 
+CANADA = ["Alberta", "British Columbia", "Manitoba", "New Brunswick",
+          "Newfoundland and Labrador", "Nova Scotia", "Ontario",
+          "Prince Edward Island", "Quebec", "Saskatchewan"]
 
 def us_data(source_file):
     df = pd.read_csv(source_file)
     df.columns = [datetime.strptime(c, "%m/%d/%y").date() if i > 11 else c
                   for i, c in enumerate(df.columns)]
+    df = df[df["Province_State"].isin(US)]
     dates = df.columns.values.tolist()[-SERIES_LENGTH:]
     pv = pd.pivot_table(df, values=dates, index="Province_State",
                         columns=[], aggfunc=np.sum).transpose()
@@ -30,6 +43,7 @@ def canada_data(source_file):
     df = pd.read_csv(source_file)
     df.columns = [datetime.strptime(c, "%m/%d/%y").date() if i > 3 else c
                   for i, c in enumerate(df.columns)]
+    df = df[df["Province/State"].isin(CANADA)]
     df = df[df["Country/Region"] == "Canada"]
     dates = df.columns.values.tolist()[-SERIES_LENGTH:]
     df = df[["Province/State"] + dates].set_index("Province/State").transpose()
