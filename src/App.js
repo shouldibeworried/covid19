@@ -60,7 +60,7 @@ class App extends React.Component {
             />
           </Row>
           <Row>
-            <RecentCasesMap mapType={mapType} cases={cases} population={population} />
+            <RecentCasesMap mapType={mapType} cases={cases} deaths={deaths} population={population} />
             <R0Map mapType={mapType} cases={cases} />
           </Row>
           <Row>
