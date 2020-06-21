@@ -5,7 +5,7 @@ import json
 
 from datetime import datetime
 
-
+SERIES_LENGTH = 50 
 EUROPE = ["Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus", "Czechia",
           "Denmark", "Estonia", "Finland", "France", "Germany", "Greece",
           "Hungary", "Iceland", "Ireland", "Italy", "Latvia", "Liechtenstein",
@@ -18,7 +18,7 @@ def us_data(source_file):
     df = pd.read_csv(source_file)
     df.columns = [datetime.strptime(c, "%m/%d/%y").date() if i > 11 else c
                   for i, c in enumerate(df.columns)]
-    dates = df.columns.values.tolist()[-40:]
+    dates = df.columns.values.tolist()[-SERIES_LENGTH:]
     pv = pd.pivot_table(df, values=dates, index="Province_State",
                         columns=[], aggfunc=np.sum).transpose()
     as_dct = pv.to_dict(orient='series')
@@ -31,7 +31,7 @@ def canada_data(source_file):
     df.columns = [datetime.strptime(c, "%m/%d/%y").date() if i > 3 else c
                   for i, c in enumerate(df.columns)]
     df = df[df["Country/Region"] == "Canada"]
-    dates = df.columns.values.tolist()[-40:]
+    dates = df.columns.values.tolist()[-SERIES_LENGTH:]
     df = df[["Province/State"] + dates].set_index("Province/State").transpose()
     as_dct = df.to_dict(orient='series')
     return as_dct, df.index.tolist()
@@ -44,7 +44,7 @@ def eu_data(source_file):
 
     df = df[df["Country/Region"].isin(EUROPE)]
     df = df[df["Province/State"].isnull()]
-    dates = df.columns.values.tolist()[-40:]
+    dates = df.columns.values.tolist()[-SERIES_LENGTH:]
     df = df[["Country/Region"] + dates].set_index("Country/Region").transpose()
     as_dct = df.to_dict(orient='series')
     return as_dct, df.index.tolist()
