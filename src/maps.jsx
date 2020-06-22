@@ -121,7 +121,9 @@ const Legend = (props) => {
 };
 
 Legend.propTypes = {
-  colorArray: PropTypes.arrayOf(PropTypes.oneOfType(PropTypes.number, PropTypes.string)).isRequired,
+  colorArray: PropTypes.arrayOf(PropTypes.arrayOf(
+    PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  )).isRequired,
 };
 
 
