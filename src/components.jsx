@@ -16,6 +16,8 @@ import {
 } from './methodology';
 
 import language from './language.json';
+import { needsThe } from './settings.json';
+
 import {
   recentCasesAlertLevel,
   r0AlertLevel,
@@ -23,6 +25,9 @@ import {
   projectionPhrase,
   needsDisclaimer,
 } from './thresholds';
+
+
+const maybeThe = (country) => (needsThe.includes(country) ? `the ${country}` : country);
 
 export class Header extends React.Component {
   constructor(props) {
@@ -92,10 +97,10 @@ export function CurrentSituation(props) {
         <Card.Body>
           <Card.Title>
             Current situation in&nbsp;
-            {country}
+            {maybeThe(country)}
           </Card.Title>
           <Card.Text>
-            {language.RECENTCASES.replace('{country}', country)}
+            {language.RECENTCASES.replace('{country}', maybeThe(country))}
           </Card.Text>
           <Alert variant={recentCasesAlertLevel(recent)}>
             {recent.toFixed(0)}
@@ -108,7 +113,7 @@ export function CurrentSituation(props) {
             {(Number.isNaN(low) || Number.isNaN(high))
               ? language.NODUNKELZIFFER
               : language.DUNKELZIFFER
-                .replace(/{country}/g, country)
+                .replace(/{country}/g, maybeThe(country))
                 .replace(/{low}/g, low.toFixed(0))
                 .replace(/{high}/g, high.toFixed(0))}
           </Card.Text>
@@ -139,18 +144,18 @@ export function Outlook(props) {
         <Card.Body>
           <Card.Title>
             Outlook for&nbsp;
-            {country}
+            {maybeThe(country)}
           </Card.Title>
           {Number.isNaN(r0)
             ? (
               <Card.Text>
-                {language.NORNOUGHT.replace(/{country}/g, country)}
+                {language.NORNOUGHT.replace(/{country}/g, maybeThe(country))}
               </Card.Text>
             )
             : (
               <div>
                 <Card.Text>
-                  {language.RNOUGHT.replace(/{country}/g, country)}
+                  {language.RNOUGHT.replace(/{country}/g, maybeThe(country))}
                 </Card.Text>
                 <Alert variant={r0AlertLevel(r0)}>
                   r
@@ -160,14 +165,14 @@ export function Outlook(props) {
                 </Alert>
                 <Card.Text>
                   {language.RNOUGHTEXPL
-                    .replace(/{country}/g, country)
+                    .replace(/{country}/g, maybeThe(country))
                     .replace(/{summary}/g, r0Summary(r0))}
                 </Card.Text>
                 {!Number.isNaN(df) && (d > minDeathsPerMonth) && (
                   <Card.Text>
                     {needsDisclaimer(r0, df) ? language.PROJECTIONDISCLAIMER : ''}
                     {language.DEATHPROJECTION
-                      .replace(/{country}/g, country)
+                      .replace(/{country}/g, maybeThe(country))
                       .replace(/{recentDeaths}/g, d)
                       .replace(/{projectionPhrase}/g, projectionPhrase(df))}
                   </Card.Text>
