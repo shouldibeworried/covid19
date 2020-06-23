@@ -30,6 +30,7 @@ class App extends React.Component {
 
   handleFilterChange(country) {
     this.setState({ country });
+    window.location.hash = country;
   }
 
   render() {
