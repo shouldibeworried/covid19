@@ -2,8 +2,14 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
+test('renders current situation card', () => {
   const { getByText } = render(<App />);
-  const linkElement = getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  const currentSituation = getByText(/Current situation/i);
+  expect(currentSituation).toBeInTheDocument();
+});
+
+test('renders outlook card', () => {
+  const { getByText } = render(<App />);
+  const outlook = getByText(/Current situation/i);
+  expect(outlook).toBeInTheDocument();
 });
