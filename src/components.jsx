@@ -6,12 +6,13 @@ import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Navbar from 'react-bootstrap/Navbar';
-import Table from 'react-bootstrap/Table';
 
 import {
-  rNoughtWeeklyAverage, unknownInfectionFactorMedian,
-  confirmedRecentCasesPer100K, estimatedRecentCasesPer100K,
-  deathFactor, recentDeaths, unknownInfectionFactorRange,
+  rNoughtWeeklyAverage,
+  confirmedRecentCasesPer100K,
+  deathFactor,
+  recentDeaths,
+  unknownInfectionFactorRange,
   minDeathsPerMonth,
 } from './methodology';
 
@@ -189,53 +190,4 @@ Outlook.propTypes = {
   country: PropTypes.string.isRequired,
   cases: PropTypes.arrayOf(PropTypes.number).isRequired,
   deaths: PropTypes.arrayOf(PropTypes.number).isRequired,
-};
-
-
-export function SummaryTable(props) {
-  const { cases, deaths, population } = props;
-  return (
-    <Table>
-      <thead>
-        <tr>
-          <th>Country/State/Province</th>
-          <th>r0</th>
-          <th>unknown Infections</th>
-          <th>confirmed cases per 100k</th>
-          <th>estimated cases per 100k</th>
-          <th>deaths next month / current month</th>
-        </tr>
-      </thead>
-      <tbody>
-        {Object.keys(cases).map(
-          (key) => (
-            <tr key={key}>
-              <td>{key}</td>
-              <td>
-                {rNoughtWeeklyAverage(cases[key]).toFixed(2)}
-              </td>
-              <td>
-                {unknownInfectionFactorMedian(cases[key], deaths[key]).toFixed(2)}
-              </td>
-              <td>
-                {confirmedRecentCasesPer100K(cases[key], population[key]).toFixed(2)}
-              </td>
-              <td>
-                {estimatedRecentCasesPer100K(cases[key], deaths[key], population[key]).toFixed(2)}
-              </td>
-              <td>
-                {deathFactor(cases[key], deaths[key]).toFixed(2)}
-              </td>
-            </tr>
-          ),
-        )}
-      </tbody>
-    </Table>
-  );
-}
-
-SummaryTable.propTypes = {
-  cases: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
-  deaths: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
-  population: PropTypes.objectOf(PropTypes.number).isRequired,
 };

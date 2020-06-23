@@ -5,7 +5,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 
 import {
-  Header, CurrentSituation, Outlook, SummaryTable,
+  Header, CurrentSituation, Outlook,
 } from './components';
 import {
   naMap,
@@ -71,9 +71,6 @@ class App extends React.Component {
             <R0Map mapType={mapType} cases={cases} />
           </Row>
           <Row>
-            <SummaryTable cases={cases} deaths={deaths} population={population} />
-          </Row>
-          <Row>
             <p>
               Data:&nbsp;
               <a href="https://github.com/CSSEGISandData/COVID-19">
@@ -83,7 +80,7 @@ class App extends React.Component {
               <a href="https://www.naturalearthdata.com">
                 Natural Earth
               </a>
-              ; data last updated on&nbsp;
+              ; data available until&nbsp;
               {lastUpdatedDate}
               ;
             </p>
