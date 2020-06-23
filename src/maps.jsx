@@ -30,7 +30,7 @@ export const naMap = {
 export const euMap = {
   geoUrl: 'maps/europe.json',
   projection: 'geoAzimuthalEqualArea',
-  projectionConfig: { rotate: [-15.0, -52.0, 0], scale: 1000 },
+  projectionConfig: { rotate: [-10.0, -52.0, 0], scale: 1000 },
 };
 
 export const colorMapFactory = (getValue, colorScale, defaultColor) => ((name) => {
