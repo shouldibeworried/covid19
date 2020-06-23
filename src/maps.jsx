@@ -139,7 +139,7 @@ export const R0Map = (props) => {
       <Card className="mt-4">
         <Card.Body>
           <Card.Title>
-            Basic reproduction factor
+            Basic reproduction number
           </Card.Title>
           <Map mapType={mapType} colorMap={colorMap} />
           <Legend colorArray={Array.from(r0Colors)} />
