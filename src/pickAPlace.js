@@ -1,3 +1,6 @@
+import eu from './data/eu.json';
+import na from './data/na.json';
+
 const longCodes = {
   'de-at': 'Austria',
   'fr-be': 'Belgium',
@@ -48,6 +51,11 @@ const shortCodes = {
 
 
 const pickAPlace = () => {
+  const hash = decodeURIComponent(window.location.hash.slice(1));
+  if (hash in eu.cases || hash in na.cases) {
+    return hash;
+  }
+
   const lang = navigator.language.toLowerCase();
 
   if (lang in longCodes) {
