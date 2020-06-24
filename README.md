@@ -10,7 +10,7 @@ live.
 ## Table of Contents
 
 - [Data sources](#data-sources)
-- [What the numbers mean, and how they're calculated](#what-the-numbers-mean-and-how-they-re-calculated)
+- [What the numbers mean, and how they're calculated](#what-the-numbers-mean-and-how-theyre-calculated)
 - [Frequently asked questions](#frequently-asked-questions)
 
 
@@ -50,14 +50,14 @@ The basic reproduction number, also called the R0, indicates a trend: have
 things been getting better or worse over the past week? If it's below 1, things
 are getting better, if it's above 1, things are getting worse.
 
+It is defined as the average number of people that one sick person infects.
+[In this video](https://www.youtube.com/watch?v=22SQVZ4CeXA), Germany's
+chancellor Angela Merkel explains it much better than I ever could.
+
 It is also the number that you want to look at if you want to understand if
 public health measures are effective. For example, if your state has recently
 ordered people to wear masks you should expect the R0 to go down about 1-2
 weeks after the measure has been introduced.
-
-It is defined as the average number of people that one sick person infects.
-[In this video](https://www.youtube.com/watch?v=22SQVZ4CeXA), Germany's
-chancellor Angela Merkel explains it much better than I ever could.
 
 To calculate it, we also need to know to know how long it takes, on average,
 from when someone gets infected and when they pass it on. Epidemiologists call
@@ -88,7 +88,7 @@ tipped from above 1 to below or vice versa.
 For example, a state might be coming out of a lockdown, which means that case
 numbers are currently exceptionally low, but R0 might already have picked up.
 Since deaths are always a bit delayed with respect to cases, there will be some
-time where you're still benefitting from the presently low numbers of deaths.
+time where you're still benefitting from the presently low numbers of cases.
 
 
 ### Why take the 7 day average over the R0, and not just show the current value?
