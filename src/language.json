@@ -3,7 +3,7 @@
   "RECENTCASESEXPL": "People who have recently become infected are the ones who can pass the disease on to others.",
   "DUNKELZIFFER": "This number only includes confirmed infections. The number of reported deaths in {country} suggests that, in reality, there might be {low} to {high} times as many recent infections.",
   "NODUNKELZIFFER": "This number only includes confirmed infections. The true number is probably considerably higher. Based on existing data it is hard to say by how much, though.",
-  "RNOUGHT": "Covid-19's basic reproduction number in {country}, averaged over the past 7 days, has been approximately:",
+  "RNOUGHT": "When epidemiologists want to see a trend in infections, they look at the basic reproduction number (R0). Below 1 is good, above 1 is bad. Covid-19's basic reproduction number in {country}, averaged over the past 7 days, has been approximately:",
   "RNOUGHTEXPL": "This means that the number of infections in {country} is {summary}.",
   "NORNOUGHT": "There isn't enough disease activity in {country} to estimate the basic reproduction number. That's a good thing.",
   "PROJECTIONDISCLAIMER": "It might take a while before this is reflected in the number of deaths, though. ",
