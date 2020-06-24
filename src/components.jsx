@@ -159,7 +159,7 @@ export function Outlook(props) {
                   {language.RNOUGHT.replace(/{country}/g, maybeThe(country))}
                 </Card.Text>
                 <Alert variant={r0AlertLevel(r0)}>
-                  r
+                  R
                   <sub>0</sub>
                   &nbsp;=&nbsp;
                   {r0.toFixed(1)}

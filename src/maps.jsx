@@ -143,6 +143,13 @@ export const R0Map = (props) => {
           </Card.Title>
           <Map mapType={mapType} colorMap={colorMap} />
           <Legend colorArray={Array.from(r0Colors)} />
+          <Card.Text>
+            The basic reproduction number shows a trend in infections. See the&nbsp;
+            <a href="https://github.com/shouldibeworried/covid19#basic-reproduction-number">
+              README
+            </a>
+            &nbsp;for more information.
+          </Card.Text>
         </Card.Body>
       </Card>
     </Col>
@@ -221,6 +228,13 @@ export class RecentCasesMap extends React.Component {
               ? Array.from(estimatedCasesColors)
               : Array.from(confirmedCasesColors)}
             />
+            <Card.Text>
+              See the&nbsp;
+              <a href="https://github.com/shouldibeworried/covid19#confirmed-recent-infections">
+                README
+              </a>
+              &nbsp;for more information.
+            </Card.Text>
             <ConfirmedEstdToggle
               showEstimated={showEstimated}
               onToggleChange={this.handleToggleChange}
