@@ -20,13 +20,18 @@ const defaultR0Summary = 'growing exponentially at a high rate';
 
 
 const projectionPhrases = new Map([
-  [0.5, 'less than half as many'],
-  [0.9, 'a smaller number of'],
+  [0.4, 'less than half as many'],
+  [0.6, 'around half as many'],
+  [0.9, 'a slightly smaller number of'],
   [1.1, 'roughly the same number of'],
-  [2, 'a greater number of'],
-  [3, 'more than twice as many'],
-  [5, 'more than three times as many'],
-  [10, 'more than five times as many'],
+  [1.9, 'a greater number of'],
+  [2.2, 'around twice as many'],
+  [2.8, 'more than twice as many'],
+  [3.3, 'around three times as many'],
+  [4.7, 'more than three times as many'],
+  [5.5, 'around five times as many'],
+  [9.5, 'more than five times as many'],
+  [11, 'around ten times as many'],
   [20, 'more than ten times as many'],
 ]);
 const defaultProjectionPhrase = 'more than twenty times as many';
