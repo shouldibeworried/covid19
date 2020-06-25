@@ -70,12 +70,53 @@ average of this number over a 7 day period.
 
 ### Estimated infections
 
-Explanation coming soon
+When
+[randomized antibody testing was conducted in Sweden](https://www.folkhalsomyndigheten.se/contentas-sets/6561cbb8fcb8435788fb69f5fd1b4356/seroepi-demiologiska-studier-genomgangen-covid-1-delrap-port-1.pdf)
+researchers found that between 4-6% of Swedes had antibodies for Covid-19. With
+a population of about 10 million this works out to 400,000-600,000 people. The
+study ended on May 17, 2020, and yet on that day Sweden had only about 30,000
+recorded cases. In other words, there must have been between 12 and 19 unknown
+infections for every know case!
+
+This website attempts to quantify how much larger the true number of infections
+is, compared to the recorded cases. It does this, by comparing the case
+fatality ratio to the infection fatality ratio. _Case fatality rate_ is the
+ratio of people with a _known_ Covid infection who die from the disease, while
+the _infection fatality rate_ is the ratio of _all_ infected people, known or
+unknown, who die from the disease. The difference between the two, tells us how
+many unknown infections there are.
+
+The case fatality rate is something we can estimate from the data. To do this,
+I'm simply dividing a month's worth of recorded deaths by a month's worth of
+new cases. Since deaths lag typically lag a bit behind cases, I'm assuming an
+offset of 16 days between deaths and cases.
+
+I will say, that this is not perfect. There is some evidence that in many
+places, deaths are underreported, but not nearly as much as cases.
+
+The infection fatality rate is the big unknown here. Scientists don't know the
+precise value of it, yet, but they
+[have settled on a range between 0.5% and 1.0%](https://www.medrxiv.org/content/10.1101/2020.05.03.20089854v3).
+It will likely also change a bit depending on a country's age distribution,
+preexisting conditions, health care system etc. Just to be safe, I'm assuming
+an even wider range between 0.3% and 1.2%. This is why you see such a wide
+range on the website. For example, for Sweden it currently says that the
+total number of infections is between 5 and 20 times the number of known cases.
 
 
 ### Projected deaths
 
-Explanation coming soon
+This is a very course estimate of deaths, under some simplifications.
+I'm assuming that the R0 stays the same over the course of the next weeks.
+
+I'm starting by calculating the number of cases that will contribute to the
+next 30 day's deaths. Because I'm assuming a 16 day offset between testing
+positive and death, I get the first 16 days worth of cases directly from the
+data. For the remaining 14 days, I'm simply projecting cases one serial
+interval at a time, under the assumption of a constant R0. This gives me a
+projection of cases that will contribute to next month's deaths. Multiplying
+that with the case fatality rate is an easy first guess at the number of deaths
+in the following month.
 
 
 ## Frequently asked questions
@@ -99,3 +140,16 @@ testing labs are fully staffed and fewer on the weekends. I believe that by
 taking the average over a 7 day period, we can get a more meaningful number.
 This comes, of course at the expense of having a delay before you can see the
 full effect of a new policy. 
+
+
+### Why does it not show the R0, projected deaths, or estimated infection for some places?
+
+Once the number of cases becomes too small, the calculations become susceptible
+to noise. That's why I'm not calculating these numbers unless there is a
+minimum number of cases and deaths.
+
+For the [estimated cases](#estimated-infections) I have added an additional
+criterion that the case fatality must be greater than 0.5%, that is the lower
+bound of the presumed infection fatality interval. A case fatality below that
+almost certainly means that a country is underreporting deaths. Yes, I'm
+looking at you, Spain.
