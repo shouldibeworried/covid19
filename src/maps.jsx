@@ -144,7 +144,8 @@ export const R0Map = (props) => {
           <Map mapType={mapType} colorMap={colorMap} />
           <Legend colorArray={Array.from(r0Colors)} />
           <Card.Text>
-            The basic reproduction number shows a trend in infections. See the&nbsp;
+            The basic reproduction number indicates whether infection rates are
+            going down (blue) or up (red). See the&nbsp;
             <a href="https://github.com/shouldibeworried/covid19#basic-reproduction-number">
               README
             </a>
