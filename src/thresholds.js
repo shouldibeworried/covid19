@@ -8,6 +8,7 @@ const defaultRecentCasesAlertLevel = 'danger';
 const r0AlertLevels = new Map([
   [0.95, 'success'],
   [1.05, 'info'],
+  [1.5, 'warning'],
 ]);
 const defaultR0AlertLevel = 'danger';
 
