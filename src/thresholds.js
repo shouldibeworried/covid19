@@ -1,5 +1,4 @@
 const recentCasesAlertLevels = new Map([
-  [0.5, 'success'],
   [10, 'info'],
   [50, 'warning'],
 ]);
@@ -44,7 +43,7 @@ export const confirmedCasesColors = new Map([
   [50, '#fea044'],
   [100, '#f03423'],
   [250, '#ca0d21'],
-  [100000, '#a90025'],
+  [100000, '#8d001f'],
 ]);
 export const defaultConfirmedCasesColor = '#eeeeee';
 
@@ -55,7 +54,7 @@ export const estimatedCasesColors = new Map([
   [175, '#fea044'],
   [350, '#f03423'],
   [900, '#ca0d21'],
-  [100000, '#a90025'],
+  [100000, '#8d001f'],
 ]);
 export const defaultEstimatedCasesColor = '#eeeeee';
 
