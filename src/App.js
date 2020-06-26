@@ -30,8 +30,10 @@ class App extends React.Component {
   }
 
   handleFilterChange(country) {
-    this.setState({ country });
-    window.location.hash = country;
+    if (country in eu.cases || country in na.cases) {
+      this.setState({ country });
+      window.location.hash = country;
+    }
   }
 
   render() {
@@ -68,8 +70,9 @@ class App extends React.Component {
               cases={cases}
               deaths={deaths}
               population={population}
+              onCountryChange={this.handleFilterChange}
             />
-            <R0Map mapType={mapType} cases={cases} />
+            <R0Map mapType={mapType} cases={cases} onCountryChange={this.handleFilterChange} />
           </Row>
           <Row>
             <p>
