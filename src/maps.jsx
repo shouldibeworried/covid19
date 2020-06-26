@@ -40,7 +40,7 @@ export const colorMapFactory = (getValue, colorScale, defaultColor) => ((name) =
 
 
 const Map = (props) => {
-  const { mapType, colorMap } = props;
+  const { mapType, colorMap, onCountryChange } = props;
   const { geoUrl, projection, projectionConfig } = mapType;
   return (
     <ComposableMap
@@ -54,6 +54,7 @@ const Map = (props) => {
             <Geography
               key={geo.rsmKey}
               geography={geo}
+              onClick={() => (onCountryChange(geo.properties.NAME_EN))}
               fill={colorMap(geo.properties.NAME_EN)}
               stroke="grey"
             />
@@ -76,6 +77,7 @@ const propTypeMap = PropTypes.shape({
 Map.propTypes = {
   mapType: propTypeMap.isRequired,
   colorMap: PropTypes.func.isRequired,
+  onCountryChange: PropTypes.func.isRequired,
 };
 
 
@@ -128,7 +130,7 @@ Legend.propTypes = {
 
 
 export const R0Map = (props) => {
-  const { mapType, cases } = props;
+  const { mapType, cases, onCountryChange } = props;
   const colorMap = colorMapFactory(
     (name) => (name in cases ? rNoughtWeeklyAverage(cases[name]) : NaN),
     r0Color,
@@ -141,7 +143,7 @@ export const R0Map = (props) => {
           <Card.Title>
             Basic reproduction number
           </Card.Title>
-          <Map mapType={mapType} colorMap={colorMap} />
+          <Map mapType={mapType} colorMap={colorMap} onCountryChange={onCountryChange} />
           <Legend colorArray={Array.from(r0Colors)} />
           <Card.Text>
             The basic reproduction number indicates whether infection rates are
@@ -160,6 +162,7 @@ export const R0Map = (props) => {
 R0Map.propTypes = {
   mapType: propTypeMap.isRequired,
   cases: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
+  onCountryChange: PropTypes.func.isRequired,
 };
 
 
@@ -197,6 +200,7 @@ export class RecentCasesMap extends React.Component {
       cases,
       deaths,
       population,
+      onCountryChange,
     } = this.props;
     const { showEstimated } = this.state;
     let colorMap;
@@ -224,7 +228,7 @@ export class RecentCasesMap extends React.Component {
             <Card.Title>
               New cases over the last 7 days per 100K population
             </Card.Title>
-            <Map mapType={mapType} colorMap={colorMap} />
+            <Map mapType={mapType} colorMap={colorMap} onCountryChange={onCountryChange} />
             <Legend colorArray={showEstimated
               ? Array.from(estimatedCasesColors)
               : Array.from(confirmedCasesColors)}
@@ -252,4 +256,5 @@ RecentCasesMap.propTypes = {
   cases: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
   deaths: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
   population: PropTypes.objectOf(PropTypes.number).isRequired,
+  onCountryChange: PropTypes.func.isRequired,
 };
