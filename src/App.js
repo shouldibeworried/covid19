@@ -77,7 +77,7 @@ class App extends React.Component {
               <a href="https://github.com/CSSEGISandData/COVID-19">
                 Johns Hopkins University
               </a>
-              ; maps shapes from:&nbsp;
+              ; map shapes from:&nbsp;
               <a href="https://www.naturalearthdata.com">
                 Natural Earth
               </a>
