@@ -48,12 +48,12 @@ export const confirmedCasesColors = new Map([
 export const defaultConfirmedCasesColor = '#eeeeee';
 
 export const estimatedCasesColors = new Map([
-  [20, '#ffffcc'],
-  [35, '#ffeda0'],
-  [90, '#fed976'],
-  [175, '#fea044'],
-  [350, '#f03423'],
-  [900, '#ca0d21'],
+  [25, '#ffffcc'],
+  [50, '#ffeda0'],
+  [100, '#fed976'],
+  [250, '#fea044'],
+  [500, '#f03423'],
+  [1000, '#ca0d21'],
   [100000, '#8d001f'],
 ]);
 export const defaultEstimatedCasesColor = '#eeeeee';
