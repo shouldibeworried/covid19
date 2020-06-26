@@ -1,10 +1,9 @@
-"Should I be worried?" is a little quarantine hobby project that I started
+[Should I be worried?](https://shouldibeworried.github.io/covid19/)
+is a little quarantine hobby project that I started
 because, on the one hand, I wasn't too happy with how existing dashboards are
 presenting Covid-19 case data, and, on the other hand, like many others, I wanted
 to use the lockdown to learn a new skill, in this case React and modern Javascript.
 
-Click [here](https://shouldibeworried.github.io/covid19/) to see the website
-live.
 
 ## Table of Contents
 
