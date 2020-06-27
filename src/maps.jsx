@@ -178,7 +178,7 @@ ConfirmedEstdToggle.propTypes = {
   onToggleChange: PropTypes.func.isRequired,
 };
 
-export class RecentCasesMap extends React.Components {
+export class RecentCasesMap extends React.Component {
   constructor(props) {
     super(props);
     const offset = 7 * 16;
@@ -189,14 +189,14 @@ export class RecentCasesMap extends React.Components {
   decreaseOffset() {
     const { offset } = this.state;
     if (offset < 7) {
-      this.setState({ offset: 7 * 16 });
+      this.setState({ offset: 7 * 17 });
     } else {
       this.setState({ offset: offset - 7 });
     }
   }
 
   componentDidMount() {
-    setInterval(this.decreaseOffset, 2000);
+    setInterval(this.decreaseOffset, 1500);
   }
 
   render() {
@@ -208,9 +208,9 @@ export class RecentCasesMap extends React.Components {
       onCountryChange,
     } = this.props;
     const { offset } = this.state;
-    const startDate = new Date(dates[dates.length - offset - 8]);
+    const startDate = new Date(dates[dates.length - offset - 7]);
     const endDate = new Date(dates[dates.length - offset - 1]);
-    const format = Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    const format = Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
     const colorMap = colorMapFactory(
       (name) => (name in cases
         ? confirmedRecentCasesPer100K(cases[name], population[name], offset)
@@ -229,6 +229,9 @@ export class RecentCasesMap extends React.Components {
         <Card.Body>
           <Map mapType={mapType} colorMap={colorMap} onCountryChange={onCountryChange} />
           <Legend colorArray={Array.from(confirmedCasesColors)} />
+          <Card.Text>
+            https://shouldibeworried.github.io/covid19/
+          </Card.Text>
         </Card.Body>
       </Card>
     );
