@@ -2,6 +2,7 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
 
+import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 
@@ -52,30 +53,38 @@ class App extends React.Component {
         />
         <Container>
           <Row>
-            <CurrentSituation
-              country={country}
-              cases={cases[country]}
-              deaths={deaths[country]}
-              localPopulation={population[country]}
-            />
-            <Outlook
-              country={country}
-              cases={cases[country]}
-              deaths={deaths[country]}
-            />
+            <Col md={7}>
+              <RecentCasesMap
+                mapType={mapType}
+                cases={cases}
+                deaths={deaths}
+                population={population}
+                onCountryChange={this.handleFilterChange}
+              />
+            </Col>
+            <Col>
+              <CurrentSituation
+                country={country}
+                cases={cases[country]}
+                deaths={deaths[country]}
+                localPopulation={population[country]}
+              />
+            </Col>
           </Row>
           <Row>
-            <RecentCasesMap
-              mapType={mapType}
-              cases={cases}
-              deaths={deaths}
-              population={population}
-              onCountryChange={this.handleFilterChange}
-            />
-            <R0Map mapType={mapType} cases={cases} onCountryChange={this.handleFilterChange} />
+            <Col md={7}>
+              <R0Map mapType={mapType} cases={cases} onCountryChange={this.handleFilterChange} />
+            </Col>
+            <Col>
+              <Outlook
+                country={country}
+                cases={cases[country]}
+                deaths={deaths[country]}
+              />
+            </Col>
           </Row>
           <Row>
-            <p>
+            <p className="mt-4">
               Data:&nbsp;
               <a href="https://github.com/CSSEGISandData/COVID-19">
                 Johns Hopkins University

@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Card from 'react-bootstrap/Card';
-import Col from 'react-bootstrap/Col';
 import ToggleButton from 'react-bootstrap/ToggleButton';
 import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
@@ -137,25 +136,23 @@ export const R0Map = (props) => {
     defaultR0Color,
   );
   return (
-    <Col md>
-      <Card className="mt-4">
-        <Card.Body>
-          <Card.Title>
-            Basic reproduction number
-          </Card.Title>
-          <Map mapType={mapType} colorMap={colorMap} onCountryChange={onCountryChange} />
-          <Legend colorArray={Array.from(r0Colors)} />
-          <Card.Text>
-            The basic reproduction number indicates whether infection rates are
-            going down (blue) or up (red). See the&nbsp;
-            <a href="https://github.com/shouldibeworried/covid19#basic-reproduction-number">
-              README
-            </a>
-            &nbsp;for more information.
-          </Card.Text>
-        </Card.Body>
-      </Card>
-    </Col>
+    <Card className="mt-4">
+      <Card.Header>
+        Basic reproduction number
+      </Card.Header>
+      <Card.Body>
+        <Map mapType={mapType} colorMap={colorMap} onCountryChange={onCountryChange} />
+        <Legend colorArray={Array.from(r0Colors)} />
+        <Card.Text>
+          The basic reproduction number indicates whether infection rates are
+          going down (blue) or up (red). See the&nbsp;
+          <a href="https://github.com/shouldibeworried/covid19#basic-reproduction-number">
+            README
+          </a>
+          &nbsp;for more information.
+        </Card.Text>
+      </Card.Body>
+    </Card>
   );
 };
 
@@ -222,31 +219,29 @@ export class RecentCasesMap extends React.Component {
       );
     }
     return (
-      <Col md>
-        <Card className="mt-4">
-          <Card.Body>
-            <Card.Title>
-              New cases over the last 7 days per 100K population
-            </Card.Title>
-            <Map mapType={mapType} colorMap={colorMap} onCountryChange={onCountryChange} />
-            <Legend colorArray={showEstimated
-              ? Array.from(estimatedCasesColors)
-              : Array.from(confirmedCasesColors)}
-            />
-            <Card.Text>
-              See the&nbsp;
-              <a href="https://github.com/shouldibeworried/covid19#confirmed-recent-infections">
-                README
-              </a>
-              &nbsp;for more information.
-            </Card.Text>
-            <ConfirmedEstdToggle
-              showEstimated={showEstimated}
-              onToggleChange={this.handleToggleChange}
-            />
-          </Card.Body>
-        </Card>
-      </Col>
+      <Card className="mt-4">
+        <Card.Header>
+          New cases over the last 7 days per 100K population
+        </Card.Header>
+        <Card.Body>
+          <Map mapType={mapType} colorMap={colorMap} onCountryChange={onCountryChange} />
+          <Legend colorArray={showEstimated
+            ? Array.from(estimatedCasesColors)
+            : Array.from(confirmedCasesColors)}
+          />
+          <Card.Text>
+            See the&nbsp;
+            <a href="https://github.com/shouldibeworried/covid19#confirmed-recent-infections">
+              README
+            </a>
+            &nbsp;for more information.
+          </Card.Text>
+          <ConfirmedEstdToggle
+            showEstimated={showEstimated}
+            onToggleChange={this.handleToggleChange}
+          />
+        </Card.Body>
+      </Card>
     );
   }
 }
