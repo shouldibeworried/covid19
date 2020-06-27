@@ -75,15 +75,15 @@ export const unknownInfectionFactorMedian = (cases, deaths) => (
 );
 
 
-const recentCases = (cases) => {
-  const current = cases[cases.length - 1];
-  const previous = cases[cases.length - 1 - week];
+const recentCases = (cases, offset) => {
+  const current = cases[cases.length - offset - 1];
+  const previous = cases[cases.length - offset - 1 - week];
   return current - previous;
 };
 
 
-export const confirmedRecentCasesPer100K = (cases, population) => (
-  (100000 * recentCases(cases)) / population
+export const confirmedRecentCasesPer100K = (cases, population, offset) => (
+  (100000 * recentCases(cases, offset)) / population
 );
 
 

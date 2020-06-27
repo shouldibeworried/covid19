@@ -41,7 +41,7 @@ class App extends React.Component {
     const { country } = this.state;
     const cases = country in eu.cases ? eu.cases : na.cases;
     const deaths = country in eu.deaths ? eu.deaths : na.deaths;
-    const lastUpdatedDate = country in eu.cases ? eu.dates.slice(-1)[0] : na.dates.slice(-1)[0];
+    const dates = country in eu.cases ? eu.dates : na.dates;
     const mapType = country in eu.cases ? euMap : naMap;
     return (
       <div className="App">
@@ -57,7 +57,7 @@ class App extends React.Component {
               <RecentCasesMap
                 mapType={mapType}
                 cases={cases}
-                deaths={deaths}
+                dates={dates}
                 population={population}
                 onCountryChange={this.handleFilterChange}
               />
@@ -70,33 +70,6 @@ class App extends React.Component {
                 localPopulation={population[country]}
               />
             </Col>
-          </Row>
-          <Row>
-            <Col md={7}>
-              <R0Map mapType={mapType} cases={cases} onCountryChange={this.handleFilterChange} />
-            </Col>
-            <Col>
-              <Outlook
-                country={country}
-                cases={cases[country]}
-                deaths={deaths[country]}
-              />
-            </Col>
-          </Row>
-          <Row>
-            <p className="mt-4">
-              Data:&nbsp;
-              <a href="https://github.com/CSSEGISandData/COVID-19">
-                Johns Hopkins University
-              </a>
-              ; map shapes from:&nbsp;
-              <a href="https://www.naturalearthdata.com">
-                Natural Earth
-              </a>
-              ; includes data as of&nbsp;
-              {lastUpdatedDate}
-              ;
-            </p>
           </Row>
         </Container>
       </div>

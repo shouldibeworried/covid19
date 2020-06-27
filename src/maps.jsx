@@ -178,78 +178,45 @@ ConfirmedEstdToggle.propTypes = {
   onToggleChange: PropTypes.func.isRequired,
 };
 
-export class RecentCasesMap extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showEstimated: false,
-    };
-    this.handleToggleChange = this.handleToggleChange.bind(this);
-  }
-
-  handleToggleChange(showEstimated) {
-    this.setState({ showEstimated });
-  }
-
-  render() {
-    const {
-      mapType,
-      cases,
-      deaths,
-      population,
-      onCountryChange,
-    } = this.props;
-    const { showEstimated } = this.state;
-    let colorMap;
-    if (showEstimated) {
-      colorMap = colorMapFactory(
-        (name) => (name in cases
-          ? estimatedRecentCasesPer100K(cases[name], deaths[name], population[name])
-          : NaN),
-        estimatedCasesColor,
-        defaultEstimatedCasesColor,
-      );
-    } else {
-      colorMap = colorMapFactory(
-        (name) => (name in cases
-          ? confirmedRecentCasesPer100K(cases[name], population[name])
-          : NaN),
-        confirmedCasesColor,
-        defaultConfirmedCasesColor,
-      );
-    }
-    return (
-      <Card className="mt-4">
-        <Card.Header>
-          New cases over the last 7 days per 100K population
-        </Card.Header>
-        <Card.Body>
-          <Map mapType={mapType} colorMap={colorMap} onCountryChange={onCountryChange} />
-          <Legend colorArray={showEstimated
-            ? Array.from(estimatedCasesColors)
-            : Array.from(confirmedCasesColors)}
-          />
-          <Card.Text>
-            See the&nbsp;
-            <a href="https://github.com/shouldibeworried/covid19#confirmed-recent-infections">
-              README
-            </a>
-            &nbsp;for more information.
-          </Card.Text>
-          <ConfirmedEstdToggle
-            showEstimated={showEstimated}
-            onToggleChange={this.handleToggleChange}
-          />
-        </Card.Body>
-      </Card>
-    );
-  }
-}
+export const RecentCasesMap = (props) => {
+  const {
+    mapType,
+    cases,
+    population,
+    dates,
+    onCountryChange,
+  } = props;
+  const offset = 7 * 4;
+  const startDate = new Date(dates[dates.length - offset - 8]);
+  const endDate = new Date(dates[dates.length - offset - 1]);
+  const format = Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  const colorMap = colorMapFactory(
+    (name) => (name in cases
+      ? confirmedRecentCasesPer100K(cases[name], population[name], offset)
+      : NaN),
+    confirmedCasesColor,
+    defaultConfirmedCasesColor,
+  );
+  return (
+    <Card className="mt-4">
+      <Card.Header>
+        New Covid-19 cases per 100K population&nbsp;
+        {format.format(startDate)}
+        &nbsp;through&nbsp;
+        {format.format(endDate)}
+      </Card.Header>
+      <Card.Body>
+        <Map mapType={mapType} colorMap={colorMap} onCountryChange={onCountryChange} />
+        <Legend colorArray={Array.from(confirmedCasesColors)} />
+      </Card.Body>
+    </Card>
+  );
+};
 
 RecentCasesMap.propTypes = {
   mapType: propTypeMap.isRequired,
   cases: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
-  deaths: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
   population: PropTypes.objectOf(PropTypes.number).isRequired,
+  dates: PropTypes.arrayOf(PropTypes.date).isRequired,
   onCountryChange: PropTypes.func.isRequired,
 };
