@@ -5,7 +5,7 @@ import json
 
 from datetime import datetime
 
-SERIES_LENGTH = 50 
+SERIES_LENGTH = 120 
 EUROPE = ["Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus", "Czechia",
           "Denmark", "Estonia", "Finland", "France", "Germany", "Greece",
           "Hungary", "Iceland", "Ireland", "Italy", "Latvia", "Liechtenstein",
