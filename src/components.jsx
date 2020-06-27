@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 import Alert from 'react-bootstrap/Alert';
 import Card from 'react-bootstrap/Card';
-import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Navbar from 'react-bootstrap/Navbar';
 
@@ -93,34 +92,30 @@ export function CurrentSituation(props) {
   const recent = confirmedRecentCasesPer100K(cases, localPopulation);
   const { low, high } = unknownInfectionFactorRange(cases, deaths);
   return (
-    <Col md>
-      <Card className="mt-4">
-        <Card.Body>
-          <Card.Title>
-            Current situation in&nbsp;
-            {maybeThe(country)}
-          </Card.Title>
-          <Card.Text>
-            {language.RECENTCASES.replace('{country}', maybeThe(country))}
-          </Card.Text>
-          <Alert variant={recentCasesAlertLevel(recent)}>
-            {recent.toFixed(0)}
-            &nbsp;per 100,000 inhabitants
-          </Alert>
-          <Card.Text>
-            {language.RECENTCASESEXPL}
-          </Card.Text>
-          <Card.Text>
-            {(Number.isNaN(low) || Number.isNaN(high))
-              ? language.NODUNKELZIFFER
-              : language.DUNKELZIFFER
-                .replace(/{country}/g, maybeThe(country))
-                .replace(/{low}/g, low.toFixed(0))
-                .replace(/{high}/g, high.toFixed(0))}
-          </Card.Text>
-        </Card.Body>
-      </Card>
-    </Col>
+    <div className="mt-4">
+      <h5>
+        Current situation in&nbsp;
+        {maybeThe(country)}
+      </h5>
+      <p>
+        {language.RECENTCASES.replace('{country}', maybeThe(country))}
+      </p>
+      <Alert variant={recentCasesAlertLevel(recent)}>
+        {recent.toFixed(0)}
+        &nbsp;per 100,000 inhabitants
+      </Alert>
+      <p>
+        {language.RECENTCASESEXPL}
+      </p>
+      <p>
+        {(Number.isNaN(low) || Number.isNaN(high))
+          ? language.NODUNKELZIFFER
+          : language.DUNKELZIFFER
+            .replace(/{country}/g, maybeThe(country))
+            .replace(/{low}/g, low.toFixed(0))
+            .replace(/{high}/g, high.toFixed(0))}
+      </p>
+    </div>
   );
 }
 
@@ -140,49 +135,45 @@ export function Outlook(props) {
   const d = recentDeaths(deaths);
   const df = deathFactor(cases, deaths);
   return (
-    <Col md>
-      <Card className="mt-4">
-        <Card.Body>
-          <Card.Title>
-            Outlook for&nbsp;
-            {maybeThe(country)}
-          </Card.Title>
-          {Number.isNaN(r0)
-            ? (
-              <Card.Text>
-                {language.NORNOUGHT.replace(/{country}/g, maybeThe(country))}
-              </Card.Text>
-            )
-            : (
-              <div>
-                <Card.Text>
-                  {language.RNOUGHT.replace(/{country}/g, maybeThe(country))}
-                </Card.Text>
-                <Alert variant={r0AlertLevel(r0)}>
-                  R
-                  <sub>0</sub>
-                  &nbsp;=&nbsp;
-                  {r0.toFixed(1)}
-                </Alert>
-                <Card.Text>
-                  {language.RNOUGHTEXPL
-                    .replace(/{country}/g, maybeThe(country))
-                    .replace(/{summary}/g, r0Summary(r0))}
-                </Card.Text>
-                {!Number.isNaN(df) && (d > minDeathsPerMonth) && (
-                  <Card.Text>
-                    {needsDisclaimer(r0, df) ? language.PROJECTIONDISCLAIMER : ''}
-                    {language.DEATHPROJECTION
-                      .replace(/{country}/g, maybeThe(country))
-                      .replace(/{recentDeaths}/g, d)
-                      .replace(/{projectionPhrase}/g, projectionPhrase(df))}
-                  </Card.Text>
-                )}
-              </div>
+    <div className="mt-4">
+      <h5>
+        Outlook for&nbsp;
+        {maybeThe(country)}
+      </h5>
+      {Number.isNaN(r0)
+        ? (
+          <p>
+            {language.NORNOUGHT.replace(/{country}/g, maybeThe(country))}
+          </p>
+        )
+        : (
+          <div>
+            <p>
+              {language.RNOUGHT.replace(/{country}/g, maybeThe(country))}
+            </p>
+            <Alert variant={r0AlertLevel(r0)}>
+              R
+              <sub>0</sub>
+              &nbsp;=&nbsp;
+              {r0.toFixed(1)}
+            </Alert>
+            <p>
+              {language.RNOUGHTEXPL
+                .replace(/{country}/g, maybeThe(country))
+                .replace(/{summary}/g, r0Summary(r0))}
+            </p>
+            {!Number.isNaN(df) && (d > minDeathsPerMonth) && (
+              <p>
+                {needsDisclaimer(r0, df) ? language.PROJECTIONDISCLAIMER : ''}
+                {language.DEATHPROJECTION
+                  .replace(/{country}/g, maybeThe(country))
+                  .replace(/{recentDeaths}/g, d)
+                  .replace(/{projectionPhrase}/g, projectionPhrase(df))}
+              </p>
             )}
-        </Card.Body>
-      </Card>
-    </Col>
+          </div>
+        )}
+    </div>
   );
 }
 
