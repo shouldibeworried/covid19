@@ -178,40 +178,62 @@ ConfirmedEstdToggle.propTypes = {
   onToggleChange: PropTypes.func.isRequired,
 };
 
-export const RecentCasesMap = (props) => {
-  const {
-    mapType,
-    cases,
-    population,
-    dates,
-    onCountryChange,
-  } = props;
-  const offset = 7 * 4;
-  const startDate = new Date(dates[dates.length - offset - 8]);
-  const endDate = new Date(dates[dates.length - offset - 1]);
-  const format = Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-  const colorMap = colorMapFactory(
-    (name) => (name in cases
-      ? confirmedRecentCasesPer100K(cases[name], population[name], offset)
-      : NaN),
-    confirmedCasesColor,
-    defaultConfirmedCasesColor,
-  );
-  return (
-    <Card className="mt-4">
-      <Card.Header>
-        New Covid-19 cases per 100K population&nbsp;
-        {format.format(startDate)}
-        &nbsp;through&nbsp;
-        {format.format(endDate)}
-      </Card.Header>
-      <Card.Body>
-        <Map mapType={mapType} colorMap={colorMap} onCountryChange={onCountryChange} />
-        <Legend colorArray={Array.from(confirmedCasesColors)} />
-      </Card.Body>
-    </Card>
-  );
-};
+export class RecentCasesMap extends React.Components {
+  constructor(props) {
+    super(props);
+    const offset = 7 * 16;
+    this.state = { offset };
+    this.decreaseOffset = this.decreaseOffset.bind(this);
+  }
+
+  decreaseOffset() {
+    const { offset } = this.state;
+    if (offset < 7) {
+      this.setState({ offset: 7 * 16 });
+    } else {
+      this.setState({ offset: offset - 7 });
+    }
+  }
+
+  componentDidMount() {
+    setInterval(this.decreaseOffset, 2000);
+  }
+
+  render() {
+    const {
+      mapType,
+      cases,
+      population,
+      dates,
+      onCountryChange,
+    } = this.props;
+    const { offset } = this.state;
+    const startDate = new Date(dates[dates.length - offset - 8]);
+    const endDate = new Date(dates[dates.length - offset - 1]);
+    const format = Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    const colorMap = colorMapFactory(
+      (name) => (name in cases
+        ? confirmedRecentCasesPer100K(cases[name], population[name], offset)
+        : NaN),
+      confirmedCasesColor,
+      defaultConfirmedCasesColor,
+    );
+    return (
+      <Card className="mt-4">
+        <Card.Header>
+          New Covid-19 cases per 100K population&nbsp;
+          {format.format(startDate)}
+          &nbsp;through&nbsp;
+          {format.format(endDate)}
+        </Card.Header>
+        <Card.Body>
+          <Map mapType={mapType} colorMap={colorMap} onCountryChange={onCountryChange} />
+          <Legend colorArray={Array.from(confirmedCasesColors)} />
+        </Card.Body>
+      </Card>
+    );
+  }
+}
 
 RecentCasesMap.propTypes = {
   mapType: propTypeMap.isRequired,
