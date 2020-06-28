@@ -94,7 +94,12 @@ class App extends React.Component {
                 Natural Earth
               </a>
               ; includes data as of&nbsp;
-              {lastUpdatedDate}
+              {Intl.DateTimeFormat('en-CA', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+                timeZone: 'UTC',
+              }).format(new Date(lastUpdatedDate))}
               ;
             </p>
           </Row>
