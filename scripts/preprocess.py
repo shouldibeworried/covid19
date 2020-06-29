@@ -11,7 +11,9 @@ EUROPE = ["Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus", "Czechia",
           "Hungary", "Iceland", "Ireland", "Italy", "Latvia", "Liechtenstein",
           "Lithuania", "Luxembourg", "Malta", "Netherlands", "Norway", "Poland",
           "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Sweden",
-          "Switzerland", "United Kingdom"]
+          "Switzerland", "United Kingdom", "Russia", "Moldova", "Ukraine",
+          "Belarus", "Serbia", "North Macedonia", "Montenegro", "Kosovo",
+          "Bosnia and Herzegovina", "Albania"]
 US = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado",
       "Connecticut", "Delaware", "District of Columbia", "Florida", "Georgia",
       "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky",
