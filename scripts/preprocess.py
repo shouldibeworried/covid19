@@ -2,18 +2,20 @@ import argparse
 import numpy as np
 import pandas as pd
 import json
+import urllib.request
 
 from datetime import datetime
 
+FRANCE_URL = "https://dashboard.covid19.data.gouv.fr/data/code-FRA.json"
 SERIES_LENGTH = 50 
-EUROPE = ["Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus", "Czechia",
-          "Denmark", "Estonia", "Finland", "France", "Germany", "Greece",
-          "Hungary", "Iceland", "Ireland", "Italy", "Latvia", "Liechtenstein",
-          "Lithuania", "Luxembourg", "Malta", "Netherlands", "Norway", "Poland",
-          "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Sweden",
-          "Switzerland", "United Kingdom", "Russia", "Moldova", "Ukraine",
-          "Belarus", "Serbia", "North Macedonia", "Montenegro", "Kosovo",
-          "Bosnia and Herzegovina", "Albania"]
+EUROPE = ["Albania", "Austria", "Belarus", "Belgium", "Bosnia and Herzegovina",
+          "Bulgaria", "Croatia", "Cyprus", "Czechia", "Denmark", "Estonia",
+          "Finland", "Germany", "Greece", "Hungary", "Iceland", "Ireland",
+          "Italy", "Kosovo", "Latvia", "Liechtenstein", "Lithuania",
+          "Luxembourg", "Malta", "Moldova", "Montenegro", "Netherlands",
+          "North Macedonia", "Norway", "Poland", "Portugal", "Romania",
+          "Russia", "Serbia", "Slovakia", "Slovenia", "Spain", "Sweden",
+          "Switzerland", "Ukraine", "United Kingdom"]
 US = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado",
       "Connecticut", "Delaware", "District of Columbia", "Florida", "Georgia",
       "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky",
@@ -66,6 +68,16 @@ def eu_data(source_file):
     return as_dct, df.index.tolist()
 
 
+def france_data():
+    f = urllib.request.urlopen(FRANCE_URL)
+    fr = json.load(f)
+    fr = fr[-SERIES_LENGTH:]
+    deaths = [d["deces"] for d in fr]
+    cases = [d["casConfirmes"] for d in fr]
+    dts = [datetime.strptime(d["date"], "%Y-%m-%d").date() for d in fr]
+    return cases, deaths, dts
+
+
 def output_format(cases, deaths, dates):
     aggregate = {
         "dates": [dt.isoformat() for dt in dates],
@@ -90,7 +102,12 @@ def main(us_cases_file, us_deaths_file, world_cases_file, world_deaths_file,
 
     eu_cases, dts1 = eu_data(world_cases_file)
     eu_deaths, dts2 = eu_data(world_deaths_file)
+    fr_cases, fr_deaths, dts3 = france_data()
+    assert dts1 == dts2 == dts3
+
     europe = output_format(eu_cases, eu_deaths, dts1)
+    europe["cases"]["France"] = fr_cases
+    europe["deaths"]["France"] = fr_deaths
     with open(eu_outfile, "w") as f:
         json.dump(europe, f)
     
