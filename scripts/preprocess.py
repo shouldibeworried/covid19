@@ -72,8 +72,14 @@ def france_data():
     f = urllib.request.urlopen(FRANCE_URL)
     fr = json.load(f)
     fr = fr[-SERIES_LENGTH:]
-    deaths = [d["deces"] for d in fr]
-    cases = [d["casConfirmes"] for d in fr]
+    deaths = []
+    cases = []
+    previous_deaths = previous_cases = 0
+    for d in fr:
+        previous_deaths = d.get("deces") or previous_deaths
+        deaths.append(previous_deaths)
+        previous_cases = d.get("casConfirmes") or previous_cases
+        cases.append(previous_cases)
     dts = [datetime.strptime(d["date"], "%Y-%m-%d").date() for d in fr]
     return cases, deaths, dts
 
