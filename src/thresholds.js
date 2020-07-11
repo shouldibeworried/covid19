@@ -60,9 +60,9 @@ export const defaultEstimatedCasesColor = '#eeeeee';
 
 export const r0Colors = new Map([
   [0.5, '#4575b4'],
-  [0.75, '#74add1'],
-  [0.95, '#c6e6f1'],
-  [1.05, '#ffffbf'],
+  [0.65, '#74add1'],
+  [0.85, '#c6e6f1'],
+  [1.15, '#ffffbf'],
   [1.5, '#fec779'],
   [2, '#f46d43'],
   [100, '#d73027'],
