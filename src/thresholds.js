@@ -5,9 +5,9 @@ const recentCasesAlertLevels = new Map([
 const defaultRecentCasesAlertLevel = 'danger';
 
 const r0AlertLevels = new Map([
-  [0.95, 'success'],
-  [1.05, 'info'],
-  [1.5, 'warning'],
+  [0.9, 'success'],
+  [1.1, 'info'],
+  [1.35, 'warning'],
 ]);
 const defaultR0AlertLevel = 'danger';
 
@@ -59,12 +59,12 @@ export const estimatedCasesColors = new Map([
 export const defaultEstimatedCasesColor = '#eeeeee';
 
 export const r0Colors = new Map([
-  [0.5, '#4575b4'],
-  [0.65, '#74add1'],
-  [0.85, '#c6e6f1'],
-  [1.15, '#ffffbf'],
-  [1.5, '#fec779'],
-  [2, '#f46d43'],
+  [0.6, '#4575b4'],
+  [0.75, '#74add1'],
+  [0.9, '#c6e6f1'],
+  [1.1, '#ffffbf'],
+  [1.35, '#fec779'],
+  [1.65, '#f46d43'],
   [100, '#d73027'],
 ]);
 export const defaultR0Color = '#eeeeee';
