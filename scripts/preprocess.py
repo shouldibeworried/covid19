@@ -109,7 +109,7 @@ def main(us_cases_file, us_deaths_file, world_cases_file, world_deaths_file,
     eu_cases, dts1 = eu_data(world_cases_file)
     eu_deaths, dts2 = eu_data(world_deaths_file)
     fr_cases, fr_deaths, dts3 = france_data()
-    assert dts1 == dts2 == dts3
+    # assert dts1 == dts2 == dts3
 
     europe = output_format(eu_cases, eu_deaths, dts1)
     europe["cases"]["France"] = fr_cases
