@@ -86,9 +86,12 @@ def output_format(cases, deaths, dates):
 
 
 def output_format_de(cases, dates):
+    def subtotals(cases):
+        return [sum(cases[:i]) for i in range(len(cases))]
+
     aggregate = {
         "dates": [dt.date().isoformat() for dt in dates],
-        "cases": {state: cases[state].astype(int).tolist() for state in cases},
+        "cases": {state: subtotals(cases[state].astype(int).tolist()) for state in cases},
         "deaths": {state: [] for state in cases}
     }
     return aggregate
