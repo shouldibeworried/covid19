@@ -53,6 +53,16 @@ def canada_data(source_file):
     return as_dct, df.index.tolist()
 
 
+def de_data(source_file):
+    df = pd.read_csv(source_file, parse_dates=["Meldedatum"])
+    pv = pd.pivot_table(df, values="AnzahlFall",
+                        index=["Meldedatum"],
+                        columns=["Landkreis"], aggfunc=np.sum, fill_value=0)
+    as_dct = pv.to_dict(orient='series')
+
+    return as_dct, pv.index.tolist()
+
+
 def eu_data(source_file):
     df = pd.read_csv(source_file)
     df.columns = [datetime.strptime(c, "%m/%d/%y").date() if i > 3 else c
@@ -75,8 +85,17 @@ def output_format(cases, deaths, dates):
     return aggregate
 
 
+def output_format_de(cases, dates):
+    aggregate = {
+        "dates": [dt.date().isoformat() for dt in dates],
+        "cases": {state: cases[state].astype(int).tolist() for state in cases},
+        "deaths": {state: [] for state in cases}
+    }
+    return aggregate
+
+
 def main(us_cases_file, us_deaths_file, world_cases_file, world_deaths_file,
-         na_outfile, eu_outfile):
+         de_cases_file, na_outfile, eu_outfile, de_outfile):
     us_cases, dts1 = us_data(us_cases_file)
     us_deaths, dts2 = us_data(us_deaths_file)
     canada_cases, dts3 = canada_data(world_cases_file)
@@ -93,6 +112,11 @@ def main(us_cases_file, us_deaths_file, world_cases_file, world_deaths_file,
     europe = output_format(eu_cases, eu_deaths, dts1)
     with open(eu_outfile, "w") as f:
         json.dump(europe, f)
+
+    de_cases, dts = de_data(de_cases_file)
+    de = output_format_de(de_cases, dts)
+    with open(de_outfile, "w") as f:
+        json.dump(de, f)
     
 
 
@@ -115,6 +139,10 @@ if __name__ == "__main__":
         help="Johns Hopkins raw csv source for world deaths timeseries"
     )
     parser.add_argument(
+        "source_de_cases",
+        help="RKI raw source file for German cases"
+    )
+    parser.add_argument(
         "na_outfile",
         help="Name of output file for North-American data"
     )
@@ -122,6 +150,11 @@ if __name__ == "__main__":
         "eu_outfile",
         help="Name of output file for European data"
     )
+    parser.add_argument(
+        "de_outfile",
+        help="Name of output file for German data"
+    )
     args = parser.parse_args()
     main(args.source_us_cases, args.source_us_deaths, args.source_world_cases,
-         args.source_world_deaths, args.na_outfile, args.eu_outfile)
+         args.source_world_deaths, args.source_de_cases, args.na_outfile,
+         args.eu_outfile, args.de_outfile)
