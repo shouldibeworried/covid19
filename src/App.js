@@ -18,6 +18,7 @@ import {
 
 import eu from './data/eu.json';
 import na from './data/na.json';
+import de from './data/na.json';
 import population from './data/population.json';
 import pickAPlace from './pickAPlace';
 
