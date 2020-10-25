@@ -32,6 +32,12 @@ export const euMap = {
   projectionConfig: { rotate: [-10.0, -52.0, 0], scale: 1000 },
 };
 
+export const deMap = {
+  geoUrl: 'maps/de.json',
+  projection: 'geoAzimuthalEqualArea',
+  projectionConfig: { rotate: [100, -9, 0], scale: 800 },
+};
+
 export const colorMapFactory = (getValue, colorScale, defaultColor) => ((name) => {
   const value = getValue(name);
   return Number.isNaN(value) ? defaultColor : colorScale(value);

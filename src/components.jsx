@@ -41,7 +41,7 @@ export class Header extends React.Component {
   }
 
   render() {
-    const { country, europe, america } = this.props;
+    const { country, europe, america, de } = this.props;
     return (
       <Navbar bg="dark" variant="dark" className="justify-content-between">
         <Navbar.Brand>
@@ -70,6 +70,13 @@ export class Header extends React.Component {
                 </option>
               ))}
             </optgroup>
+            <optgroup label="Germany">
+              {de.map((c) => (
+                <option key={c}>
+                  {c}
+                </option>
+              ))}
+            </optgroup>
           </Form.Control>
         </Form>
       </Navbar>
@@ -81,6 +88,7 @@ Header.propTypes = {
   country: PropTypes.string.isRequired,
   europe: PropTypes.arrayOf(PropTypes.string).isRequired,
   america: PropTypes.arrayOf(PropTypes.string).isRequired,
+  de: PropTypes.arrayOf(PropTypes.string).isRequired,
   onFilterChange: PropTypes.func.isRequired,
 };
 

@@ -7,17 +7,18 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 
 import {
-  Header, CurrentSituation, Outlook,
+  Header, CurrentSituation
 } from './components';
 import {
   naMap,
   euMap,
-  R0Map,
+  deMap,
   RecentCasesMap,
 } from './maps';
 
 import eu from './data/eu.json';
 import na from './data/na.json';
+import de from './data/de.json';
 import population from './data/population.json';
 import pickAPlace from './pickAPlace';
 
@@ -39,16 +40,17 @@ class App extends React.Component {
 
   render() {
     const { country } = this.state;
-    const cases = country in eu.cases ? eu.cases : na.cases;
-    const deaths = country in eu.deaths ? eu.deaths : na.deaths;
-    const dates = country in eu.cases ? eu.dates : na.dates;
-    const mapType = country in eu.cases ? euMap : naMap;
+    const cases = country in eu.cases ? eu.cases : (country in na.cases ? na.cases : de.cases);
+    const deaths = country in eu.deaths ? eu.deaths : (country in na.deaths ? na.deaths : de.deaths);
+    const dates = country in eu.cases ? eu.dates : (country in na.cases ? na.dates : de.dates);
+    const mapType = country in eu.cases ? euMap : (country in na.cases ? naMap : deMap);
     return (
       <div className="App">
         <Header
           country={country}
           europe={Object.keys(eu.cases)}
           america={Object.keys(na.cases)}
+          de={Object.keys(de.cases)}
           onFilterChange={this.handleFilterChange}
         />
         <Container>
