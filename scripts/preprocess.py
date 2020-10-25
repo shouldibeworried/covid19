@@ -57,10 +57,24 @@ def de_data(source_file):
     df = pd.read_csv(source_file, parse_dates=["Meldedatum"])
     pv = pd.pivot_table(df, values="AnzahlFall",
                         index=["Meldedatum"],
-                        columns=["Landkreis"], aggfunc=np.sum, fill_value=0)
+                        columns=["IdLandkreis"], aggfunc=np.sum, fill_value=0)
+
     as_dct = pv.to_dict(orient='series')
 
-    return as_dct, pv.index.tolist()
+
+    # add up all Berlin districts since map doesn't have that granularity
+    berlin_total = None
+    for district_id in as_dct:
+        if district_id >= 11000 and district_id < 12000:
+            if berlin_total is None:
+                berlin_total = as_dct[district_id]
+            else:
+                berlin_total = berlin_total.add(as_dct[district_id])
+
+    all_germany = {k: v for k, v in as_dct.items() if k < 11000 or k > 12000}
+    all_germany.update({11000: berlin_total})
+
+    return all_germany, pv.index.tolist()
 
 
 def eu_data(source_file):
@@ -91,8 +105,8 @@ def output_format_de(cases, dates):
 
     aggregate = {
         "dates": [dt.date().isoformat() for dt in dates],
-        "cases": {state: subtotals(cases[state].astype(int).tolist()) for state in cases},
-        "deaths": {state: [] for state in cases}
+        "cases": {f'{state:05}': subtotals(cases[state].astype(int).tolist()) for state in cases},
+        "deaths": {f'{state:05}': [] for state in cases}
     }
     return aggregate
 
